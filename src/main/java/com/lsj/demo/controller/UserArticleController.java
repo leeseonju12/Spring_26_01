@@ -31,18 +31,6 @@ public class UserArticleController {
 		}
 	}
 
-	private Article writeArticle(String title, String body)  {
-
-		int id = lastArticleId + 1;
-
-		Article article = new Article(id, title, body);
-		articles.add(article);
-		lastArticleId++;
-
-		return article;
-
-	}
-	
 	private Article getArticleById(int id) {
 		for (Article article : articles) {
 			if (article.getId() == id) {
@@ -52,6 +40,18 @@ public class UserArticleController {
 		return null;
 	}
 
+	private Article writeArticle(String title, String body)  {
+		
+		int id = lastArticleId + 1;
+		
+		Article article = new Article(id, title, body);
+		articles.add(article);
+		lastArticleId++;
+		
+		return article;
+		
+	}
+	
 	// 액션메서드
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
@@ -60,12 +60,44 @@ public class UserArticleController {
 		Article article = getArticleById(id);
 
 		if (article == null) {
-			return id + "번 글은 없음";
+			return id + "번 글은 존재하지 않습니다.";
 		}
 
 		articles.remove(article);
 
 		return id + "번 글이 삭제되었습니다";
+	}
+	
+	// 상세보기 - 특정 게시글 하나만 보기 
+	@RequestMapping("/usr/article/getArticle")
+	@ResponseBody
+	public Object getArticle(int id) {
+		Article article = getArticleById(id);
+
+		if (article == null) {
+			return id + "번 글은 존재하지 않습니다.";
+		}
+		
+		return article;
+	}
+	
+//쿼리 파라미터 사용 - http://localhost:8081/usr/article/doModify?id=10&title=제목10수정&body=내용10수정
+// 액션메서드
+	@RequestMapping("/usr/article/doModify")
+	@ResponseBody
+	public Object doModify(int id, String title, String body) {
+
+		Article article = getArticleById(id);
+
+		if (article == null) {
+			return id + "번 글은 존재하지 않습니다.";
+		}
+		
+		article.setTitle(title);
+		article.setBody(body);
+
+//		return id + "번 글이 수정되었습니다" + article;
+		return article;
 	}
 	
 //쿼리 파라미터 사용 - http://localhost:8081/usr/article/doAdd?title=제목11&body=내용11
