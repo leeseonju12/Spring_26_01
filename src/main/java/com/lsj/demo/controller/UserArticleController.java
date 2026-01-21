@@ -18,11 +18,20 @@ public class UserArticleController {
 	public UserArticleController() {
 		articles = new ArrayList<>();
 		lastArticleId = 0;
+		
+		makeTestData();
+	}
+	
+	private void makeTestData() {
+		for (int i = 1; i <= 10; i++) {
+			String title = "제목 " + i;
+			String body = "내용 " + i;
+
+			writeArticle(title, body);
+		}
 	}
 
-	@RequestMapping("/user/article/doAdd")
-	@ResponseBody
-	public Article doAdd(String title, String body) {
+	private Article writeArticle(String title, String body)  {
 
 		int id = lastArticleId + 1;
 
@@ -33,10 +42,18 @@ public class UserArticleController {
 		return article;
 
 	}
+//쿼리 파라미터 사용 - http://localhost:8081/usr/article/doAdd?title=제목11&body=내용11
+	@RequestMapping("/usr/article/doAdd")
+	@ResponseBody
+	public Article doAdd(String title, String body) {
+		Article article = writeArticle(title, body);
+		return article;
+	}
 
-	@RequestMapping("/user/article/getArticles")
+	@RequestMapping("/usr/article/getArticles")
 	@ResponseBody
 	public List<Article> getArticles() {
 		return articles;
 	}
+
 }
