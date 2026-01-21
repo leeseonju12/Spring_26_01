@@ -1,58 +1,80 @@
 package com.lsj.demo.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@Controller
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+@Controller
 public class UserHomeController {
 
-//	@RequestMapping("/user/home/main")
-//	@ResponseBody
-//	public String showMain() {
-//		return "안녕하세요";
-//	}
-//
-//	@RequestMapping("/user/home/main2")
-//	@ResponseBody
-//	public String bye() {
-//		return "잘가";
-//	}
-//
-//	@RequestMapping("/user/home/main3")
-//	@ResponseBody
-//	public int math() {
-//		int x = 1;
-//		int y = 2;
-//		return x + y;
-//	}
+	@RequestMapping("/user/home/getArticle")
+	@ResponseBody
+	public Article getArticle() {
+		Article article = new Article(1, "제목1", "내용1");
+		return article;
+	}
 
-	int cnt;
+
 	
-	public UserHomeController() {
-		cnt = 0;
+	@RequestMapping("/user/home/getList")
+	@ResponseBody
+	public List<String> getList() {
+		List<String> list = new ArrayList<>();
+		list.add("철수 나이");
+		list.add("영수 나이");
+
+		return list;
 	}
 
-	@RequestMapping("/user/home/getCount")
+	@RequestMapping("/user/home/getMap")
 	@ResponseBody
-	public int getCount() {
-		return cnt++;
+	public Map<String, Object> getMap() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("철수 나이", 12);
+		map.put("영수 나이", 13);
+
+		return map;
 	}
 
-	@RequestMapping("/user/home/setCount")
+	@RequestMapping("/user/home/getDouble")
 	@ResponseBody
-	public String setCount() {
-		cnt = 0;
-		return "count 값: 0 으로 초기화";
+	public double getDouble() {
+		return 3.14;
+	}
+
+	@RequestMapping("/user/home/getBoolean")
+	@ResponseBody
+	public boolean getBoolean() {
+		return true;
+	}
+
+	@RequestMapping("/user/home/getString")
+	@ResponseBody
+	public String getString() {
+		return "abc";
+	}
+
+	@RequestMapping("/user/home/getInt")
+	@ResponseBody
+	public int getInt() {
+		return 100;
 	}
 	
-//	쿼리 파라미터 사용 - http://localhost:8081/user/home/setCountValue?value=230
-	@RequestMapping("/user/home/setCountValue")
-	@ResponseBody
-	public String setCountValue(int value) {
-		this.cnt = value;
-		return "count 값: " + value + " 으로 초기화";
-	}
+}
+@AllArgsConstructor
+@Getter
+@Setter
+class Article {
+	int id;
+	String title;
+	String body;
 }
