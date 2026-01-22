@@ -80,7 +80,7 @@ public class UserArticleController {
 	@RequestMapping("/usr/article/getArticles")
 	@ResponseBody
 	public List<Article> getArticles() {
-		return articleService.articles;
+		return articleService.getArticles();
 	}
 
 }
