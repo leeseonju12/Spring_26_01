@@ -16,7 +16,7 @@ public class ArticleService {
 	
 	public ArticleService(ArticleRepository articleRepository) {
 		this.articleRepository = articleRepository;
-		makeTestData();
+		// makeTestData();
 	}
 
 	// 서비스메서드
@@ -30,7 +30,8 @@ public class ArticleService {
 	}
 
 	public Article writeArticle(String title, String body) {
-		return articleRepository.writeArticle(title, body);
+		articleRepository.writeArticle(title, body);
+		return new Article(title,body);
 	}
 
 	public void deleteArticle(int id) {

@@ -28,7 +28,7 @@ public class UserArticleController {
 		Article article = articleService.getArticleById(id);
 		
 		if (article == null) {
-			return id + "번 글은 존재하지 않습니다.";
+			return id + "번 글이 존재하지 않습니다.";
 		}
 		
 		return article;
@@ -42,7 +42,7 @@ public class UserArticleController {
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return id + "번 글은 존재하지 않습니다.";
+			return id + "번 글이 존재하지 않습니다.";
 		}
 
 		articleService.deleteArticle(id);
@@ -59,13 +59,11 @@ public class UserArticleController {
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return id + "번 글은 존재하지 않습니다.";
+			return id + "번 글이 존재하지 않습니다.";
 		}
-		
-		article.setTitle(title);
-		article.setBody(body);
 
-//		return id + "번 글이 수정되었습니다" + article;
+		articleService.modifyArticle(id, title, body);
+
 		return article;
 	}
 	
