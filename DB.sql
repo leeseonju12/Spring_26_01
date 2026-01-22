@@ -6,41 +6,92 @@ USE `Spring_Demo_26_01`;
 CREATE TABLE article (
                          id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                          regDate DATETIME NOT NULL,
+                         updateDate DATETIME NOT NULL,
                          title CHAR(100) NOT NULL,
                          `body` TEXT NOT NULL
 );
 
+# 회원 테이블
+CREATE TABLE `member` (
+                         id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                         regDate DATETIME NOT NULL,
+                         updateDate DATETIME NOT NULL,
+                         loginId CHAR(30) NOT NULL,
+                         loginPw CHAR(100) NOT NULL,
+                         `name` CHAR(20) NOT NULL,
+						 nickname CHAR(20) NOT NULL,
+						 cellphoneNum CHAR(20) NOT NULL,
+						 email CHAR(20) NOT NULL
+);
+
+
+
+
 # 게시글 TD
 INSERT INTO article
 SET regDate = NOW(),
-
+updateDate = NOW(),
 title = '제목1',
 `body` = '내용1';
 
 INSERT INTO article
 SET regDate = NOW(),
-
+updateDate = NOW(),
 title = '제목2',
 `body` = '내용2';
 
 INSERT INTO article
 SET regDate = NOW(),
-
+updateDate = NOW(),
 title = '제목3',
 `body` = '내용3';
+
+# 회원 TD
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'admin',
+loginPw = 'admin',
+`name` = '관리자',
+nickname = '관리자_별명',
+cellphoneNum = '01012341234',
+email = 'abc@gmail.com';
+
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'test1',
+loginPw = 'test1',
+`name` = '회원1',
+nickname = '회원1_별명',
+cellphoneNum = '01043214321',
+email = 'abcd@gmail.com';
+
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'test2',
+loginPw = 'test2',
+`name` = '회원2',
+nickname = '회원2_별명',
+cellphoneNum = '01056785678',
+email = 'abced@gmail.com';
 
 DESC article;
 
 SELECT *
 FROM article ORDER BY id DESC;
 
+
+SELECT *
+FROM `member`;
+
+
 ##===============================###################### 테스트
 
-INSERT INTO article SET 
-    regDate = NOW(), 
-    memberId = 2, 
-    title = '제목11', 
-    `body` = '내용11';
+SELECT LAST_INSERT_ID();
+
+INSERT INTO article SET regDate = NOW(), title = '제목1', `body` = '내용1'; , DATA=[, ]
 
 SELECT *
 FROM `member`
