@@ -24,9 +24,13 @@ public class Ut {
 
 		if (obj.getClass().isArray()) {
 			return Array.getLength(obj) == 0;
+
 		}
 
 		return false;
 	}
 
+	public static Object f(String string, Object... args) {
+		return String.format(string, args);
+	}
 }
