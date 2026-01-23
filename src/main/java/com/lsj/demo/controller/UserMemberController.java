@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lsj.demo.service.MemberService;
+import com.lsj.demo.util.Ut;
 import com.lsj.demo.vo.Member;
 
 @Controller
@@ -18,6 +19,25 @@ public class UserMemberController {
 	@ResponseBody
 	public Object doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
 			String email) {
+		
+		if (Ut.isEmptyOrNull(loginId)) {
+			return "loginId 입력해";
+		}
+		if (Ut.isEmptyOrNull(loginPw)) {
+			return "loginPw 입력해";
+		}
+		if (Ut.isEmptyOrNull(name)) {
+			return "name 입력해";
+		}
+		if (Ut.isEmptyOrNull(nickname)) {
+			return "nickname 입력해";
+		}
+		if (Ut.isEmptyOrNull(cellphoneNum)) {
+			return "cellphoneNum 입력해";
+		}
+		if (Ut.isEmptyOrNull(email)) {
+			return "email 입력해";
+		}
 		
 		int id = memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 		
