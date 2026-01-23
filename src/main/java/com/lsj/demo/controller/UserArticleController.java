@@ -31,15 +31,15 @@ public class UserArticleController {
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return ResultData.from("F-1", Ut.f("%d번 게시글은 없어", id));
+			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
 
-		return ResultData.from("S-1", Ut.f("%d번 게시글입니다.", id), article);
+		return ResultData.from("S-1", Ut.f("%d번 게시글", id), article);
 	}
 
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public Object doModify(int id, String title, String body) {
+	public ResultData doModify(int id, String title, String body) {
 
 		System.out.println("id : " + id);
 		System.out.println("title : " + title);
@@ -48,40 +48,55 @@ public class UserArticleController {
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return id + "번 글은 없음";
+			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
 
 		articleService.modifyArticle(id, title, body);
 		article = articleService.getArticleById(id);
 
-		return article;
+		return ResultData.from("S-1", Ut.f("%d번 게시글이 수정되었습니다.", id), article);
 	}
 
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public String doDelete(int id) {
+	public ResultData doDelete(int id) {
 
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return id + "번 글은 없음";
+			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
 
 		articleService.deleteArticle(id);
 
-		return id + "번 글이 삭제되었습니다";
+		return ResultData.from("S-1", Ut.f("%d번 글이 삭제되었습니다.", id));
 	}
 
-	@RequestMapping("/usr/article/doAdd")
+	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public Article doAdd(String title, String body) {
-		Article article = articleService.writeArticle(title, body);
-		return article;
+	public ResultData doWrite(String title, String body) {
+
+		if (Ut.isEmptyOrNull(title)) {
+			return ResultData.from("F-1", "제목을 작성하세요.");
+		}
+		if (Ut.isEmptyOrNull(body)) {
+			return ResultData.from("F-2", "내용을 작성하세요.");
+		}
+
+		ResultData writeArticleRd = articleService.writeArticle(title, body);
+
+		int id = (int) writeArticleRd.getData1();
+
+		Article article = articleService.getArticleById(id);
+
+		return ResultData.from(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), article);
 	}
 
 	@RequestMapping("/usr/article/getArticles")
 	@ResponseBody
-	public List<Article> getArticles() {
-		return articleService.getArticles();
+	public ResultData getArticles() {
+		List<Article> articles = articleService.getArticles();
+
+		return ResultData.from("S-1", Ut.f("게시글 목록"), articles);
 	}
 }

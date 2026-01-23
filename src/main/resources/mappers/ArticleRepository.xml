@@ -12,6 +12,11 @@
 		title = #{title},
 		body = #{body}
 	</insert>
+	
+	<select id="getLastInsertId" parameterType="int">
+		SELECT
+		LAST_INSERT_ID();
+	</select>
 
 	<delete id="deleteArticle" parameterType="int">
 		DELETE FROM article
