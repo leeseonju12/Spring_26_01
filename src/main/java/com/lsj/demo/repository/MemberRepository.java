@@ -13,4 +13,5 @@ public interface MemberRepository {
 
 	public int getLastInsertId();
 	public Member getMemberByLoginId(String loginId);
+	public Member getMemberByNameAndEmail(String name, String email);
 }
