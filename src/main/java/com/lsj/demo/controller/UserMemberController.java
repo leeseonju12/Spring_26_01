@@ -18,26 +18,26 @@ public class UserMemberController {
 
 	@RequestMapping("/usr/member/doJoin")
 	@ResponseBody
-	public Object doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
+	public ResultData<Member> doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
 			String email) {
 
 		if (Ut.isEmptyOrNull(loginId)) {
-			return ResultData.from("F-1", "loginId 입력해");
+			return ResultData.from("F-1", "loginId는 필수 입력 항목입니다.");
 		}
 		if (Ut.isEmptyOrNull(loginPw)) {
-			return ResultData.from("F-2", "loginPw 입력해");
+			return ResultData.from("F-2", "loginPw는 필수 입력 항목입니다.");
 		}
 		if (Ut.isEmptyOrNull(name)) {
-			return ResultData.from("F-3", "name 입력해");
+			return ResultData.from("F-3", "이름을 입력해 주세요.");
 		}
 		if (Ut.isEmptyOrNull(nickname)) {
-			return ResultData.from("F-4", "nickname 입력해");
+			return ResultData.from("F-4", "닉네임을 입력해 주세요.");
 		}
 		if (Ut.isEmptyOrNull(cellphoneNum)) {
-			return ResultData.from("F-5", "cellphoneNum 입력해");
+			return ResultData.from("F-5", "전화번호를 입력해 주세요.");
 		}
 		if (Ut.isEmptyOrNull(email)) {
-			return ResultData.from("F-6", "email 입력해");
+			return ResultData.from("F-6", "email을 입력해 주세요.");
 		}
 
 		ResultData doJoinRd = memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
