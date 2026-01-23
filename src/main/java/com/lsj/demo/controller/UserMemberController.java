@@ -43,7 +43,7 @@ public class UserMemberController {
 		Member member = memberService.getMemberByLoginId(loginId);
 
 		if (member == null) {
-			return ResultData.from("F-3", Ut.f("%s는 잘못된 아이디입니다.", loginId));
+			return ResultData.from("F-3", Ut.f("%s 는 잘못된 아이디입니다.", loginId));
 		}
 
 		if (member.getLoginPw().equals(loginPw) == false) {
@@ -53,6 +53,16 @@ public class UserMemberController {
 		session.setAttribute("loginedMemberId", member.getId());
 
 		return ResultData.from("S-1", Ut.f("%s님 환영합니다", member.getNickname()), member);
+	}
+
+	// 로그아웃
+	@RequestMapping("/usr/member/doLogout")
+	@ResponseBody
+	public ResultData<Member> dologout(HttpSession session) {
+		session.invalidate();
+
+		return ResultData.from("S-1", Ut.f("로그아웃 되었습니다."));
+
 	}
 
 	// 회원 가입
