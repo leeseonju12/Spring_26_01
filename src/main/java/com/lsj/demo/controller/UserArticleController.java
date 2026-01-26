@@ -12,6 +12,8 @@ import com.lsj.demo.util.Ut;
 import com.lsj.demo.vo.Article;
 import com.lsj.demo.vo.ResultData;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class UserArticleController {
 
@@ -39,11 +41,19 @@ public class UserArticleController {
 
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public ResultData doModify(int id, String title, String body) {
+	public ResultData<Article> doModify(HttpSession session, int id, String title, String body) {
 
-		System.out.println("id : " + id);
-		System.out.println("title : " + title);
-		System.out.println("body : " + body);
+		boolean isLogined = false;
+		int loginedMemberId = 0;
+
+		if (session.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+		}
+
+		if (isLogined == false) {
+			return ResultData.from("F-A", "게시글 수정은 로그인 후 가능합니다.");
+		}
 
 		Article article = articleService.getArticleById(id);
 
@@ -59,10 +69,22 @@ public class UserArticleController {
 
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public ResultData doDelete(int id) {
+	public ResultData<Integer> doDelete(HttpSession session, int id) {
 
+		boolean isLogined = false;
+		int loginedMemberId = 0;
+
+		if (session.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+		}
+
+		if (isLogined == false) {
+			return ResultData.from("F-A", "게시글 삭제는 로그인 후 가능합니다.");
+		}
+		
 		Article article = articleService.getArticleById(id);
-
+		
 		if (article == null) {
 			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
@@ -72,9 +94,29 @@ public class UserArticleController {
 		return ResultData.from("S-1", Ut.f("%d번 글이 삭제되었습니다.", id), id);
 	}
 
+	@RequestMapping("/usr/article/getArticles")
+	@ResponseBody
+	public ResultData getArticles() {
+		List<Article> articles = articleService.getArticles();
+		
+		return ResultData.from("S-1", Ut.f("게시글 목록"), articles);
+	}
+	
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public ResultData doWrite(String title, String body) {
+	public ResultData<Article> doWrite(HttpSession session, String title, String body) {
+
+		boolean isLogined = false;
+		int loginedMemberId = 0;
+
+		if (session.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+		}
+
+		if (isLogined == false) {
+			return ResultData.from("F-A", "게시글 작성은 로그인 후 가능합니다.");
+		}
 
 		if (Ut.isEmptyOrNull(title)) {
 			return ResultData.from("F-1", "제목을 작성하세요.");
@@ -83,20 +125,13 @@ public class UserArticleController {
 			return ResultData.from("F-2", "내용을 작성하세요.");
 		}
 
-		ResultData writeArticleRd = articleService.writeArticle(title, body);
+		ResultData doWriteRd = articleService.writeArticle(loginedMemberId, title, body);
 
-		int id = (int) writeArticleRd.getData1();
+		int id = (int) doWriteRd.getData1();
 
 		Article article = articleService.getArticleById(id);
 
-		return ResultData.from(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), article);
+		return ResultData.newData(doWriteRd, article);
 	}
 
-	@RequestMapping("/usr/article/getArticles")
-	@ResponseBody
-	public ResultData getArticles() {
-		List<Article> articles = articleService.getArticles();
-
-		return ResultData.from("S-1", Ut.f("게시글 목록"), articles);
-	}
 }

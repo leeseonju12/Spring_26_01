@@ -58,10 +58,21 @@ public class UserMemberController {
 	// 로그아웃
 	@RequestMapping("/usr/member/doLogout")
 	@ResponseBody
-	public ResultData<Member> dologout(HttpSession session) {
-		session.invalidate();
+	public ResultData doLogout(HttpSession session) {
 
-		return ResultData.from("S-1", Ut.f("로그아웃 되었습니다."));
+		boolean isLogined = false;
+
+		if (session.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+		}
+
+		if (!isLogined) {
+			return ResultData.from("F-A", "이미 로그아웃 되어 있습니다.");
+		}
+
+		session.removeAttribute("loginedMemberId");
+
+		return ResultData.from("S-1", "로그아웃 되었습니다.");
 
 	}
 

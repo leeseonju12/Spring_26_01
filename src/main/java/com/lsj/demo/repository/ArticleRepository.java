@@ -10,7 +10,7 @@ import com.lsj.demo.vo.Article;
 public interface ArticleRepository {
 
 //	@Insert("INSERT INTO article SET regDate = NOW(), updateDate = NOW(), title = #{title}, `body` = #{body}")
-	public int writeArticle(String title, String body);
+	public int writeArticle(int memberId, String title, String body);
 
 //	@Delete("DELETE FROM article WHERE id = #{id}")
 	public void deleteArticle(int id);

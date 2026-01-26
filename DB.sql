@@ -81,6 +81,16 @@ nickname = '회원2_별명',
 cellphoneNum = '01056785678',
 email = 'abced@gmail.com';
 
+ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER regDate;
+
+UPDATE article 
+SET memberId = 2
+WHERE id IN (1,2);
+
+UPDATE article 
+SET memberId = 3
+WHERE id = 3;
+
 DESC article;
 
 SELECT *
