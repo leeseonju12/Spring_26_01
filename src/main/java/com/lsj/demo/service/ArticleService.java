@@ -32,7 +32,16 @@ public class ArticleService {
 	public ResultData writeArticle(int loginedMemberId, String title, String body) {
 		articleRepository.writeArticle(loginedMemberId, title, body);
 		int id = articleRepository.getLastInsertId();
-		return ResultData.from("S-1", Ut.f("%d번 게시글 작성되었습니다.", id), id);
+		return ResultData.from("S-1", Ut.f("%d번 게시글이 작성되었습니다.", id), id);
+	}
+	
+	public ResultData loginedMemberCanModify(int loginedMemberId, Article article) {
+
+		if (article.getMemberId() != loginedMemberId) {
+			return ResultData.from("F-A2", Ut.f("%d번 게시글에 대한 권한이 존재하지 않습니다.", article.getId()));
+		}
+
+		return ResultData.from("S-1", Ut.f("%d번 게시글이 수정되었습니다", article.getId()));
 	}
 
 	public void deleteArticle(int id) {
