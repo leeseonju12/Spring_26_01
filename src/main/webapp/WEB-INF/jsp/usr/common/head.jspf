@@ -20,7 +20,7 @@
 </head>
 <body>
 	<header>
-		<div class="flex h-20 mx-auto items-center text-3xl">
+		<div class="flex h-20 mx-auto items-center text-4xl">
 			<a href="/">LOGO</a>
 			<div class="flex-grow"></div>
 			<ul class="flex">
