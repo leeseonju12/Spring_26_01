@@ -36,7 +36,7 @@ public class UserArticleController {
 			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
 
-		return ResultData.from("S-1", Ut.f("%d번 게시글", id), article);
+		return ResultData.from("S-1", Ut.f("%d번 게시글", id), "article 1개", article);
 	}
 
 	@RequestMapping("/usr/article/doModify")
@@ -60,7 +60,7 @@ public class UserArticleController {
 		if (article == null) {
 			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
-		
+
 		ResultData loginedMemberCanModifyRd = articleService.loginedMemberCanModify(loginedMemberId, article);
 
 		if (loginedMemberCanModifyRd.isFail()) {
@@ -70,9 +70,9 @@ public class UserArticleController {
 		articleService.modifyArticle(id, title, body);
 		article = articleService.getArticleById(id);
 
-		return ResultData.from(loginedMemberCanModifyRd.getResultCode(), loginedMemberCanModifyRd.getMsg(), article);
+		return ResultData.from(loginedMemberCanModifyRd.getResultCode(), loginedMemberCanModifyRd.getMsg(),
+				"이번에 수정된 글: ", article);
 	}
-
 
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
@@ -89,30 +89,30 @@ public class UserArticleController {
 		if (isLogined == false) {
 			return ResultData.from("F-A", "게시글 삭제는 로그인 후 가능합니다.");
 		}
-		
+
 		Article article = articleService.getArticleById(id);
-		
+
 		if (article == null) {
 			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
-		
+
 		if (article.getMemberId() != loginedMemberId) {
 			return ResultData.from("F-A2", "해당 게시글에 대한 권한이 존재하지 않습니다.");
 		}
 
 		articleService.deleteArticle(id);
 
-		return ResultData.from("S-1", Ut.f("%d번 글이 삭제되었습니다.", id), id);
+		return ResultData.from("S-1", Ut.f("%d번 글이 삭제되었습니다.", id), "이번에 삭제된 게시글의 id", id);
 	}
 
 	@RequestMapping("/usr/article/getArticles")
 	@ResponseBody
 	public ResultData getArticles() {
 		List<Article> articles = articleService.getArticles();
-		
-		return ResultData.from("S-1", Ut.f("게시글 목록"), articles);
+
+		return ResultData.from("S-1", Ut.f("게시글 목록"), "article 리스트", articles);
 	}
-	
+
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
 	public ResultData<Article> doWrite(HttpSession session, String title, String body) {
@@ -142,7 +142,7 @@ public class UserArticleController {
 
 		Article article = articleService.getArticleById(id);
 
-		return ResultData.newData(doWriteRd, article);
+		return ResultData.newData(doWriteRd, "이번에 쓰여진 글 / 새로 INSERT 된 article", article);
 	}
 
 }
