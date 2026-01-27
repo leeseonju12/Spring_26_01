@@ -22,6 +22,7 @@ public class UserMemberController {
 	public String showLogin() {
 		return "/usr/member/login";
 	}
+
 	// 로그인
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
@@ -68,21 +69,23 @@ public class UserMemberController {
 	// 로그아웃
 	@RequestMapping("/usr/member/doLogout")
 	@ResponseBody
-	public ResultData doLogout(HttpSession session) {
+	public String doLogout(HttpSession session) {
 
 		boolean isLogined = false;
 
 		if (session.getAttribute("loginedMemberId") != null) {
 			isLogined = true;
 		}
-
-		if (!isLogined) {
-			return ResultData.from("F-A", "이미 로그아웃 되어 있습니다.");
-		}
+		
+//		NeedLoginInterceptor에서 이미 처리됨
+//		if (!isLogined) {
+//			return ResultData.from("F-A", "이미 로그아웃 되어 있습니다.");
+//		}
 
 		session.removeAttribute("loginedMemberId");
 
-		return ResultData.from("S-1", "로그아웃 되었습니다.");
+//		return ResultData.from("S-1", "로그아웃 되었습니다.");
+		return Ut.jsReplace("S-1", Ut.f("로그아웃 되었습니다."), "/");
 
 	}
 
