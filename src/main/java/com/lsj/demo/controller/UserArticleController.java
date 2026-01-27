@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.lsj.demo.DemoApplication;
 import com.lsj.demo.service.ArticleService;
 import com.lsj.demo.util.Ut;
 import com.lsj.demo.vo.Article;
@@ -18,12 +19,13 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class UserArticleController {
 
+	private final DemoApplication demoApplication;
+
 	@Autowired
 	private ArticleService articleService;
 
-	// 생성자
-	public UserArticleController() {
-
+	UserArticleController(DemoApplication demoApplication) {
+		this.demoApplication = demoApplication;
 	}
 
 	// 액션메서드
@@ -82,7 +84,7 @@ public class UserArticleController {
 
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public ResultData<Integer> doDelete(HttpSession session, int id) {
+	public String doDelete(HttpSession session, int id) {
 
 		boolean isLogined = false;
 		int loginedMemberId = 0;
@@ -91,28 +93,26 @@ public class UserArticleController {
 			isLogined = true;
 			loginedMemberId = (int) session.getAttribute("loginedMemberId");
 		}
-
+		
 		if (isLogined == false) {
-			return ResultData.from("F-A", "게시글 삭제는 로그인 후 가능합니다.");
+			return Ut.jsReplace("F-A", "게시글 삭제는 로그인 후 가능합니다.", "../member/login");
 		}
-
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
 
 		ResultData userCanDeleteRd = articleService.userCanDelete(loginedMemberId, article);
 
 		if (userCanDeleteRd.isFail()) {
-			return userCanDeleteRd;
+			return Ut.jsHistoryBack(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg());
 		}
 
 		if (userCanDeleteRd.isSuccess()) {
 			articleService.deleteArticle(id);
 		}
-
-		return ResultData.from("S-1", Ut.f("%d번 글이 삭제되었습니다.", id), "이번에 삭제된 게시글의 id", id);
+		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/list");
 	}
 
 	@RequestMapping("/usr/article/list")

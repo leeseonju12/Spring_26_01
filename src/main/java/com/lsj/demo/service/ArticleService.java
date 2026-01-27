@@ -37,10 +37,10 @@ public class ArticleService {
 
 	public ResultData userCanDelete(int loginedMemberId, Article article) {
 		if (article.getMemberId() != loginedMemberId) {
-			return ResultData.from("F-A2", Ut.f("%d번 게시글에 대한 삭제 권한 없음", article.getId()));
+			return ResultData.from("F-A2", Ut.f("%d번 게시글에 대한 삭제 권한이 존재하지 않습니다.", article.getId()));
 		}
 
-		return ResultData.from("S-1", Ut.f("%d번 게시글을 삭제 가능", article.getId()));
+		return ResultData.from("S-1", Ut.f("%d번 게시글을 삭제 할 수 있습니다.", article.getId()));
 	}
 
 	public void deleteArticle(int id) {
