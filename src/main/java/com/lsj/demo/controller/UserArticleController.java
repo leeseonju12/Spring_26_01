@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lsj.demo.DemoApplication;
 import com.lsj.demo.service.ArticleService;
 import com.lsj.demo.util.Ut;
 import com.lsj.demo.vo.Article;
@@ -19,21 +18,14 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UserArticleController {
-
-	private final DemoApplication demoApplication;
-
 	@Autowired
 	private ArticleService articleService;
-
-	UserArticleController(DemoApplication demoApplication) {
-		this.demoApplication = demoApplication;
-	}
 
 	// 액션메서드
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(HttpServletRequest req, Model model, int id) {
 
-		Rq rq = new Rq(req);
+		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 		
@@ -45,7 +37,7 @@ public class UserArticleController {
 	@ResponseBody
 	public ResultData<Article> doModify(HttpServletRequest req, int id, String title, String body) {
 
-		Rq rq = new Rq(req);
+		Rq rq = (Rq) req.getAttribute("rq");
 
 		if (rq.isLogined() == false) {
 			return ResultData.from("F-A", "게시글 수정은 로그인 후 가능합니다.");
@@ -75,7 +67,7 @@ public class UserArticleController {
 	@ResponseBody
 	public String doDelete(HttpServletRequest req, int id) {
 
-		Rq rq = new Rq(req);
+		Rq rq = (Rq) req.getAttribute("rq");
 		
 		if (rq.isLogined() == false) {
 			return Ut.jsReplace("F-A", "게시글 삭제는 로그인 후 가능합니다.", "../member/login");
@@ -110,7 +102,7 @@ public class UserArticleController {
 	@ResponseBody
 	public ResultData<Article> doWrite(HttpServletRequest req, String title, String body) {
 
-		Rq rq = new Rq(req);
+		Rq rq = (Rq) req.getAttribute("rq");
 
 		if (rq.isLogined() == false) {
 			return ResultData.from("F-A", "게시글 작성은 로그인 후 가능합니다.");
