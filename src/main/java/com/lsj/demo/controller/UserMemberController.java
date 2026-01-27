@@ -18,10 +18,14 @@ public class UserMemberController {
 	@Autowired
 	private MemberService memberService;
 
+	@RequestMapping("/usr/member/login")
+	public String showLogin() {
+		return "/usr/member/login";
+	}
 	// 로그인
 	@RequestMapping("/usr/member/doLogin")
 	@ResponseBody
-	public ResultData<Member> doLogin(HttpSession session, String loginId, String loginPw) {
+	public String doLogin(HttpSession session, String loginId, String loginPw) {
 
 		boolean isLogined = false;
 
@@ -30,29 +34,35 @@ public class UserMemberController {
 		}
 
 		if (isLogined) {
-			return ResultData.from("F-A", "이미 로그인되어 있습니다.");
+//			return ResultData.from("F-A", "이미 로그인되어 있습니다.");
+			return Ut.jsHistoryBack("F-A", "이미 로그인되어 있습니다.");
 		}
 
 		if (Ut.isEmptyOrNull(loginId)) {
-			return ResultData.from("F-1", "loginId는 필수 입력 항목입니다.");
+//			return ResultData.from("F-1", "loginId는 필수 입력 항목입니다.");
+			return Ut.jsHistoryBack("F-1", "loginId는 필수 입력 항목입니다.");
 		}
 		if (Ut.isEmptyOrNull(loginPw)) {
-			return ResultData.from("F-2", "loginPw는 필수 입력 항목입니다.");
+//			return ResultData.from("F-2", "loginPw는 필수 입력 항목입니다.");
+			return Ut.jsHistoryBack("F-2", "loginPw는 필수 입력 항목입니다.");
 		}
 
 		Member member = memberService.getMemberByLoginId(loginId);
 
 		if (member == null) {
-			return ResultData.from("F-3", Ut.f("%s 는 잘못된 아이디입니다.", loginId));
+//			return ResultData.from("F-3", Ut.f("%s 는 잘못된 아이디입니다.", loginId));
+			return Ut.jsHistoryBack("F-3", Ut.f("%s 는 존재하지 않는 아이디입니다.", loginId));
 		}
 
 		if (member.getLoginPw().equals(loginPw) == false) {
-			return ResultData.from("F-4", "비밀번호가 일치하지 않습니다.");
+//			return ResultData.from("F-4", "비밀번호가 일치하지 않습니다.");
+			return Ut.jsHistoryBack("F-4", "비밀번호가 일치하지 않습니다.");
 		}
 
 		session.setAttribute("loginedMemberId", member.getId());
 
-		return ResultData.from("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "이번에 로그인 한 회원", member);
+//		return ResultData.from("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "이번에 로그인 한 회원", member);
+		return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/");
 	}
 
 	// 로그아웃

@@ -30,9 +30,16 @@
 				<li class="hover:underline">
 					<a href="../article/list">LIST</a>
 				</li>
-				<li class="hover:underline">
-					<a href="../member/login">LOGIN</a>
-				</li>
+				<c:if test="${!rq.isLogined() }">
+					<li class="hover:underline">
+						<a href="../member/login">LOGIN</a>
+					</li>
+				</c:if>
+				<c:if test="${rq.isLogined() }">
+					<li class="hover:underline">
+						<a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" href="../member/doLogout">LOGOUT</a>
+					</li>
+				</c:if>
 			</ul>
 		</div>
 	</header>
