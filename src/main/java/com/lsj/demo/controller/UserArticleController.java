@@ -13,8 +13,9 @@ import com.lsj.demo.service.ArticleService;
 import com.lsj.demo.util.Ut;
 import com.lsj.demo.vo.Article;
 import com.lsj.demo.vo.ResultData;
+import com.lsj.demo.vo.Rq;
 
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UserArticleController {
@@ -30,17 +31,11 @@ public class UserArticleController {
 
 	// 액션메서드
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(HttpSession session, Model model, int id) {
+	public String showDetail(HttpServletRequest req, Model model, int id) {
 
-		boolean isLogined = false;
-		int loginedMemberId = 0;
+		Rq rq = new Rq(req);
 
-		if (session.getAttribute("loginedMemberId") != null) {
-			isLogined = true;
-			loginedMemberId = (int) session.getAttribute("loginedMemberId");
-		}
-
-		Article article = articleService.getForPrintArticle(loginedMemberId, id);
+		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 		
 		model.addAttribute("article", article);
 		return "usr/article/detail";
@@ -48,17 +43,11 @@ public class UserArticleController {
 
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
-	public ResultData<Article> doModify(HttpSession session, int id, String title, String body) {
+	public ResultData<Article> doModify(HttpServletRequest req, int id, String title, String body) {
 
-		boolean isLogined = false;
-		int loginedMemberId = 0;
+		Rq rq = new Rq(req);
 
-		if (session.getAttribute("loginedMemberId") != null) {
-			isLogined = true;
-			loginedMemberId = (int) session.getAttribute("loginedMemberId");
-		}
-
-		if (isLogined == false) {
+		if (rq.isLogined() == false) {
 			return ResultData.from("F-A", "게시글 수정은 로그인 후 가능합니다.");
 		}
 
@@ -68,7 +57,7 @@ public class UserArticleController {
 			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
 
-		ResultData userCanModifyRd = articleService.userCanModify(loginedMemberId, article);
+		ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
 
 		if (userCanModifyRd.isFail()) {
 			return userCanModifyRd;
@@ -84,17 +73,11 @@ public class UserArticleController {
 
 	@RequestMapping("/usr/article/doDelete")
 	@ResponseBody
-	public String doDelete(HttpSession session, int id) {
+	public String doDelete(HttpServletRequest req, int id) {
 
-		boolean isLogined = false;
-		int loginedMemberId = 0;
-
-		if (session.getAttribute("loginedMemberId") != null) {
-			isLogined = true;
-			loginedMemberId = (int) session.getAttribute("loginedMemberId");
-		}
+		Rq rq = new Rq(req);
 		
-		if (isLogined == false) {
+		if (rq.isLogined() == false) {
 			return Ut.jsReplace("F-A", "게시글 삭제는 로그인 후 가능합니다.", "../member/login");
 		}
 		Article article = articleService.getArticleById(id);
@@ -103,7 +86,7 @@ public class UserArticleController {
 			return Ut.jsHistoryBack("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
 
-		ResultData userCanDeleteRd = articleService.userCanDelete(loginedMemberId, article);
+		ResultData userCanDeleteRd = articleService.userCanDelete(rq.getLoginedMemberId(), article);
 
 		if (userCanDeleteRd.isFail()) {
 			return Ut.jsHistoryBack(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg());
@@ -125,17 +108,11 @@ public class UserArticleController {
 
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public ResultData<Article> doWrite(HttpSession session, String title, String body) {
+	public ResultData<Article> doWrite(HttpServletRequest req, String title, String body) {
 
-		boolean isLogined = false;
-		int loginedMemberId = 0;
+		Rq rq = new Rq(req);
 
-		if (session.getAttribute("loginedMemberId") != null) {
-			isLogined = true;
-			loginedMemberId = (int) session.getAttribute("loginedMemberId");
-		}
-
-		if (isLogined == false) {
+		if (rq.isLogined() == false) {
 			return ResultData.from("F-A", "게시글 작성은 로그인 후 가능합니다.");
 		}
 
@@ -146,7 +123,7 @@ public class UserArticleController {
 			return ResultData.from("F-2", "내용을 작성하세요.");
 		}
 
-		ResultData doWriteRd = articleService.writeArticle(loginedMemberId, title, body);
+		ResultData doWriteRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body);
 
 		int id = (int) doWriteRd.getData1();
 
