@@ -35,21 +35,32 @@
 		WHERE id = #{id}
 	</update>
 
-	<select id="getArticleById" parameterType="int"
+	<select id="getForPrintArticle" parameterType="int"
 		resultType="com.lsj.demo.vo.Article">
 		SELECT A.*, M.nickname AS extra__writer
 		FROM article AS A
 		INNER JOIN `member` AS M
 		ON A.memberId = M.id
-		WHERE A.id = #{id}
+		WHERE A.id =
+		#{id}
 	</select>
 
-	<select id="getArticles" resultType="com.lsj.demo.vo.Article">
-		SELECT A.*, M.nickname AS extra__writer 
+	<select id="getArticleById" parameterType="int"
+		resultType="com.lsj.demo.vo.Article">
+		SELECT *
+		FROM article
+		WHERE A.id =
+		#{id}
+	</select>
+
+	<select id="getArticles"
+		resultType="com.lsj.demo.vo.Article">
+		SELECT A.*, M.nickname AS extra__writer
 		FROM article AS A
 		INNER JOIN `member` AS M
 		ON A.memberId = M.id
-		ORDER BY A.id DESC
+		ORDER BY A.id
+		DESC
 	</select>
 
 </mapper>

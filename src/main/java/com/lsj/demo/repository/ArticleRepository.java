@@ -15,5 +15,5 @@ public interface ArticleRepository {
 	public Article getArticleById(int id);
 	public List<Article> getArticles();	
 	public int getLastInsertId();
-
+	public Article getForPrintArticle(int id);
 }

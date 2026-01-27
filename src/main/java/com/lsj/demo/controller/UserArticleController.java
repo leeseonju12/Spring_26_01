@@ -28,13 +28,18 @@ public class UserArticleController {
 
 	// 액션메서드
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(Model model, int id) {
+	public String showDetail(HttpSession session, Model model, int id) {
 
-		Article article = articleService.getArticleById(id);
+		boolean isLogined = false;
+		int loginedMemberId = 0;
 
-//		if (article == null) {
-//			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
-//		}
+		if (session.getAttribute("loginedMemberId") != null) {
+			isLogined = true;
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
+		}
+
+		Article article = articleService.getForPrintArticle(loginedMemberId, id);
+		
 		model.addAttribute("article", article);
 		return "usr/article/detail";
 	}
@@ -61,17 +66,16 @@ public class UserArticleController {
 			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
 
-		ResultData loginedMemberCanModifyRd = articleService.loginedMemberCanModify(loginedMemberId, article);
+		ResultData userCanModifyRd = articleService.userCanModify(loginedMemberId, article);
 
-		if (loginedMemberCanModifyRd.isFail()) {
-			return ResultData.from(loginedMemberCanModifyRd.getResultCode(), loginedMemberCanModifyRd.getMsg());
+		if (userCanModifyRd.isFail()) {
+			return ResultData.from(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg());
 		}
 
 		articleService.modifyArticle(id, title, body);
 		article = articleService.getArticleById(id);
 
-		return ResultData.from(loginedMemberCanModifyRd.getResultCode(), loginedMemberCanModifyRd.getMsg(),
-				"이번에 수정된 글: ", article);
+		return ResultData.from(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "이번에 수정된 글 ", article);
 	}
 
 	@RequestMapping("/usr/article/doDelete")
