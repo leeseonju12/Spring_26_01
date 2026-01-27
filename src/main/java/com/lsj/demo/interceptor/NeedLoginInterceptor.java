@@ -1,4 +1,5 @@
 package com.lsj.demo.interceptor;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -8,14 +9,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class BeforeActionInterceptor implements HandlerInterceptor {
+public class NeedLoginInterceptor implements HandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object Handler) throws Exception {
-//		System.err.println("-=========================실행됨-=========================");
 
-		Rq rq = new Rq(req, resp);
-		req.setAttribute("rq", rq);
+		Rq rq = (Rq) req.getAttribute("rq");
+
+		if (!rq.isLogined()) {
+			System.err.println("로그인이 필요한 서비스입니다.");
+//				resp.getWriter().append("<script>~~~~")
+
+			rq.printHistoryBack("로그인이 필요한 서비스입니다.");
+
+			return false;
+		}
 
 		return HandlerInterceptor.super.preHandle(req, resp, Handler);
 	}

@@ -38,11 +38,6 @@ public class UserArticleController {
 	public ResultData<Article> doModify(HttpServletRequest req, int id, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
-
-		if (rq.isLogined() == false) {
-			return ResultData.from("F-A", "게시글 수정은 로그인 후 가능합니다.");
-		}
-
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
@@ -68,10 +63,6 @@ public class UserArticleController {
 	public String doDelete(HttpServletRequest req, int id) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
-		
-		if (rq.isLogined() == false) {
-			return Ut.jsReplace("F-A", "게시글 삭제는 로그인 후 가능합니다.", "../member/login");
-		}
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
@@ -103,11 +94,6 @@ public class UserArticleController {
 	public ResultData<Article> doWrite(HttpServletRequest req, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
-
-		if (rq.isLogined() == false) {
-			return ResultData.from("F-A", "게시글 작성은 로그인 후 가능합니다.");
-		}
-
 		if (Ut.isEmptyOrNull(title)) {
 			return ResultData.from("F-1", "제목을 작성하세요.");
 		}
