@@ -12,8 +12,8 @@
 		<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 			<tbody>
 				<tr>
-					<th style="text-align: center;">ID</th>
-					<td style="text-align: center;">${article.id }</td>
+					<th style="text-align: center;">Writer</th>
+					<td style="text-align: center;">${article.extra__writer}</td>
 				</tr>
 				<tr>
 					<th style="text-align: center;">Registration Date</th>
@@ -39,6 +39,8 @@
 		</table>
 		<div class="btns">
 			<button type="button" onClick="history.back();">뒤로가기</button>
+			<a href="../article/doModify?id=${article.id }">수정</a>
+			<a href="../article/doDelete?id=${article.id }">삭제</a>
 		</div>
 	</div>
 </section>
