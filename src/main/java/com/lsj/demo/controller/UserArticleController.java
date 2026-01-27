@@ -69,10 +69,12 @@ public class UserArticleController {
 		ResultData userCanModifyRd = articleService.userCanModify(loginedMemberId, article);
 
 		if (userCanModifyRd.isFail()) {
-			return ResultData.from(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg());
+			return userCanModifyRd;
 		}
 
-		articleService.modifyArticle(id, title, body);
+		if (userCanModifyRd.isSuccess()) {
+			articleService.modifyArticle(id, title, body);
+		}
 		article = articleService.getArticleById(id);
 
 		return ResultData.from(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "이번에 수정된 글 ", article);
@@ -100,11 +102,15 @@ public class UserArticleController {
 			return ResultData.from("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
 
-		if (article.getMemberId() != loginedMemberId) {
-			return ResultData.from("F-A2", "해당 게시글에 대한 권한이 존재하지 않습니다.");
+		ResultData userCanDeleteRd = articleService.userCanDelete(loginedMemberId, article);
+
+		if (userCanDeleteRd.isFail()) {
+			return userCanDeleteRd;
 		}
 
-		articleService.deleteArticle(id);
+		if (userCanDeleteRd.isSuccess()) {
+			articleService.deleteArticle(id);
+		}
 
 		return ResultData.from("S-1", Ut.f("%d번 글이 삭제되었습니다.", id), "이번에 삭제된 게시글의 id", id);
 	}

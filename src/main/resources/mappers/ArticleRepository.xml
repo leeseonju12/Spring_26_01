@@ -49,7 +49,7 @@
 		resultType="com.lsj.demo.vo.Article">
 		SELECT *
 		FROM article
-		WHERE A.id =
+		WHERE id =
 		#{id}
 	</select>
 
