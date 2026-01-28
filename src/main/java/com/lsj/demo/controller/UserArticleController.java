@@ -19,6 +19,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class UserArticleController {
 	@Autowired
+	private Rq rq;
+	@Autowired
 	private ArticleService articleService;
 
 	// 액션메서드

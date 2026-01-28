@@ -12,10 +12,12 @@ import com.lsj.demo.vo.ResultData;
 import com.lsj.demo.vo.Rq;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserMemberController {
+	
+	@Autowired
+	private Rq rq;
 
 	@Autowired
 	private MemberService memberService;
@@ -31,10 +33,6 @@ public class UserMemberController {
 	public String doLogin(HttpServletRequest req, String loginId, String loginPw) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
-
-//		if (isLogined) {
-//			return Ut.jsHistoryBack("F-A", "이미 로그인되어 있습니다.");
-//		}
 
 		if (Ut.isEmptyOrNull(loginId)) {
 			return Ut.jsHistoryBack("F-1", "loginId는 필수 입력 항목입니다.");
@@ -64,12 +62,6 @@ public class UserMemberController {
 	public String doLogout(HttpServletRequest req) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
-		
-//		if (!isLogined) {
-//			return ResultData.from("F-A", "이미 로그아웃 되어 있습니다.");
-//		}
-
-		rq.logout();
 
 		return Ut.jsReplace("S-1", "로그아웃 되었습니다.", "/");
 
@@ -80,11 +72,7 @@ public class UserMemberController {
 	@ResponseBody
 	public ResultData<Member> doJoin(HttpServletRequest req, String loginId, String loginPw, String name,
 			String nickname, String cellphoneNum, String email) {
-
-//		if (isLogined) {
-//			return ResultData.from("F-A", "이미 로그인되어 있습니다.");
-//		}
-
+		
 		if (Ut.isEmptyOrNull(loginId)) {
 			return ResultData.from("F-1", "loginId는 필수 입력 항목입니다.");
 		}
