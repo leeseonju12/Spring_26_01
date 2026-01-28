@@ -34,6 +34,9 @@
 					<li class="hover:underline">
 						<a href="../member/login">LOGIN</a>
 					</li>
+					<li class="hover:underline">
+						<a href="../member/join">JOIN</a>
+					</li>
 				</c:if>
 				<c:if test="${rq.isLogined() }">
 					<li class="hover:underline">

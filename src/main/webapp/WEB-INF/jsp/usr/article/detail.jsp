@@ -17,11 +17,11 @@
 				</tr>
 				<tr>
 					<th style="text-align: center;">Registration Date</th>
-					<td style="text-align: center;">${article.regDate.substring(0,10) }</td>
+					<td style="text-align: center;">${article.regDate }</td>
 				</tr>
 				<tr>
 					<th style="text-align: center;">Update Date</th>
-					<td style="text-align: center;">${article.updateDate.substring(0,10) }</td>
+					<td style="text-align: center;">${article.updateDate }</td>
 				</tr>
 				<tr>
 					<th style="text-align: center;">Member ID</th>

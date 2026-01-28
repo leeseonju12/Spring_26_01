@@ -31,6 +31,9 @@
 				</c:forEach>
 			</tbody>
 		</table>
+		<div class="btns">
+		<a href="../article/write">글 작성</a>
+		</div>
 	</div>
 </section>
 

@@ -11,22 +11,23 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class NeedLogoutInterceptor implements HandlerInterceptor {
+
 	@Autowired
 	private Rq rq;
 
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object Handler) throws Exception {
 
-		Rq rq = (Rq) req.getAttribute("rq");
+//		Rq rq = (Rq) req.getAttribute("rq");
 
 		if (rq.isLogined()) {
-			System.err.println("로그아웃이 필요한 서비스입니다.");
-			rq.printHistoryBack("로그아웃이 필요한 서비스입니다.");
+
+
+			rq.printHistoryBack("로그아웃이 필요한 서비스입니다. (NeedLogoutInterceptor)");
 
 			return false;
 		}
 
 		return HandlerInterceptor.super.preHandle(req, resp, Handler);
 	}
-
 }
