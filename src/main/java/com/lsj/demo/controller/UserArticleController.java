@@ -106,7 +106,7 @@ public class UserArticleController {
 		return "/usr/article/list";
 	}
 
-	@RequestMapping("/usr/article/wrtie")
+	@RequestMapping("/usr/article/write")
 	public String showWrite() {
 		return "/usr/article/write";
 	}
@@ -127,7 +127,9 @@ public class UserArticleController {
 
 		int id = (int) doWriteRd.getData1();
 
-		return Ut.jsReplace(doWriteRd.getResultCode(), doWriteRd.getMsg(), Ut.f("../article/detail?id=%d", id));
+		Article article = articleService.getArticleById(id);
+
+		return Ut.jsReplace(doWriteRd.getResultCode(), doWriteRd.getMsg(), "../article/detail?id=" + id);
 	}
 
 }
