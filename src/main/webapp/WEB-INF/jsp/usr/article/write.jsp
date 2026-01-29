@@ -10,6 +10,7 @@
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
 		<form action="../article/doWrite" method="POST">
+			<input type="hidden" name="boardId" id="boardIdInput" value="" />
 			<table class="table" border="1" style="width: 100%; border-collapse: collapse;">
 				<tbody>
 					<tr>
@@ -19,13 +20,13 @@
 								<div tabindex="0" role="button" class="btn btn-sm m-1" id="boardDropdownBtn">게시판을 선택하세요. 👉🏻</div>
 								<ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
 									<li>
-										<a href="../article/list?boardId=1">NOTICE</a>
+										<a href="#" onclick="selectBoard(1, 'NOTICE'); return false;">NOTICE</a>
 									</li>
 									<li>
-										<a href="../article/list?boardId=2">FREE</a>
+										<a href="#" onclick="selectBoard(2, 'FREE'); return false;">FREE</a>
 									</li>
 									<li>
-										<a href="../article/list?boardId=3">QnA</a>
+										<a href="#" onclick="selectBoard(3, 'QnA'); return false;">QnA</a>
 									</li>
 								</ul>
 							</div>
@@ -57,5 +58,13 @@
 		</div>
 	</div>
 </section>
+
+<script>
+	function selectBoard(boardId, boardName) {
+		document.getElementById('boardIdInput').value = boardId;
+		document.getElementById('boardDropdownBtn').innerText = boardName + ' 👉🏻';
+		document.activeElement.blur();
+	}
+</script>
 
 <%@ include file="../common/foot.jspf"%>

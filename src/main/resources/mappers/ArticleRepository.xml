@@ -9,6 +9,7 @@
 		SET
 		regDate = NOW(),
 		updateDate = NOW(),
+		boardId = #{boardId},
 		memberId = #{memberId},
 		title =
 		#{title},

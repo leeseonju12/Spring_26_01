@@ -9,7 +9,7 @@ import com.lsj.demo.vo.Article;
 @Mapper
 public interface ArticleRepository {
 
-	public int writeArticle(int memberId, String title, String body);
+	public int writeArticle(int memberId, int boardId, String title, String body);
 	public void deleteArticle(int id);
 	public void modifyArticle(int id, String title, String body);
 	public Article getArticleById(int id);
