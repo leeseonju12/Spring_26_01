@@ -19,14 +19,14 @@
 								<div tabindex="0" role="button" class="btn btn-sm m-1" id="boardDropdownBtn">게시판을 선택하세요. 👉🏻</div>
 								<ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
 									<li>
-								<a href="../article/list?boardId=1">NOTICE</a>
-							</li>
-							<li>
-								<a href="../article/list?boardId=2">FREE</a>
-							</li>
-							<li>
-								<a href="../article/list?boardId=3">QnA</a>
-							</li>
+										<a href="../article/list?boardId=1">NOTICE</a>
+									</li>
+									<li>
+										<a href="../article/list?boardId=2">FREE</a>
+									</li>
+									<li>
+										<a href="../article/list?boardId=3">QnA</a>
+									</li>
 								</ul>
 							</div>
 						</td>

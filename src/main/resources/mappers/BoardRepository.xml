@@ -5,7 +5,6 @@
 
 <mapper namespace="com.lsj.demo.repository.BoardRepository">
 
-
 	<select id="getBoardById" parameterType="int"
 		resultType="com.lsj.demo.vo.Board">
 		SELECT *
@@ -13,6 +12,14 @@
 		WHERE id = #{id} AND delStatus = 0
 	</select>
 
-
+<select id="getForListupBoard" parameterType="int"
+    resultType="com.lsj.demo.vo.Article">
+    SELECT A.*, M.nickname AS extra__writer
+    FROM article AS A
+    INNER JOIN `member` AS M
+    ON A.memberId = M.id
+    WHERE A.boardId = #{boardId}
+    ORDER BY A.id DESC
+</select>
 
 </mapper>

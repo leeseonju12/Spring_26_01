@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lsj.demo.service.ArticleService;
@@ -39,16 +40,30 @@ public class UserArticleController {
 		return "usr/article/detail";
 	}
 
+	/*
+	 * @RequestMapping("/usr/article/list") public String showList(Model model, int
+	 * boardId) { Board board = boardService.getBoardById(boardId);
+	 * 
+	 * List<Article> articles = articleService.getArticles();
+	 * 
+	 * model.addAttribute("articles", articles); model.addAttribute("board", board);
+	 * 
+	 * return "/usr/article/list"; }
+	 */
+	
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, int boardId) {
-		Board board = boardService.getBoardById(boardId);
+	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId) {
 
-		List<Article> articles = articleService.getArticles();
+	    int loginedMemberId = rq.getLoginedMemberId();
 
-		model.addAttribute("articles", articles);
-		model.addAttribute("board", board);
+	    Board board = boardService.getBoardById(boardId);
+	    List<Article> articles = boardService.getForListupBoard(loginedMemberId, boardId);
 
-		return "/usr/article/list";
+	    model.addAttribute("board", board);
+	    model.addAttribute("articles", articles);
+	    model.addAttribute("boardId", boardId);
+
+	    return "usr/article/list";
 	}
 
 	@RequestMapping("/usr/article/write")

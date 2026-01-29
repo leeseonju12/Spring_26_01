@@ -9,6 +9,7 @@
 <%-- <div>${board }</div> --%>
 <section class="mt-24 text-xl px-4">
 	<div class="mx-auto">
+	<div class="mb-4 text-2xl font-bold">${board.code} 게시판</div>
 		<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 			<thead>
 				<tr>

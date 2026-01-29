@@ -28,6 +28,10 @@
 					<td style="text-align: center;">${article.memberId }</td>
 				</tr>
 				<tr>
+					<th style="text-align: center;">Board</th>
+					<td style="text-align: center;">${article.extra__boardCode}</td>
+				</tr>
+				<tr>
 					<th style="text-align: center;">Title</th>
 					<td style="text-align: center;">${article.title }</td>
 				</tr>
