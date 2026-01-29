@@ -9,9 +9,28 @@
 
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
-		 <form action="../article/doWrite" method="POST">
-            <table class="table" border="1" style="width: 100%; border-collapse: collapse;">
+		<form action="../article/doWrite" method="POST">
+			<table class="table" border="1" style="width: 100%; border-collapse: collapse;">
 				<tbody>
+					<tr>
+						<th style="width: 20%;">게시판</th>
+						<td style="padding: 10px;">
+							<div class="dropdown dropdown-right dropdown-end">
+								<div tabindex="0" role="button" class="btn btn-sm m-1" id="boardDropdownBtn">게시판을 선택하세요. 👉🏻</div>
+								<ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+									<li>
+								<a href="../article/list?boardId=1">NOTICE</a>
+							</li>
+							<li>
+								<a href="../article/list?boardId=2">FREE</a>
+							</li>
+							<li>
+								<a href="../article/list?boardId=3">QnA</a>
+							</li>
+								</ul>
+							</div>
+						</td>
+					</tr>
 					<tr>
 						<th>제목</th>
 						<td style="padding: 10px;">

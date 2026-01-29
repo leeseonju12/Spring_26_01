@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lsj.demo.service.ArticleService;
+import com.lsj.demo.service.BoardService;
 import com.lsj.demo.util.Ut;
 import com.lsj.demo.vo.Article;
+import com.lsj.demo.vo.Board;
 import com.lsj.demo.vo.ResultData;
 import com.lsj.demo.vo.Rq;
 
@@ -22,8 +24,10 @@ public class UserArticleController {
 	private Rq rq;
 	@Autowired
 	private ArticleService articleService;
+	@Autowired
+	private BoardService boardService;
 
-	// 액션메서드
+	// Show
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(HttpServletRequest req, Model model, int id) {
 
@@ -33,6 +37,23 @@ public class UserArticleController {
 
 		model.addAttribute("article", article);
 		return "usr/article/detail";
+	}
+
+	@RequestMapping("/usr/article/list")
+	public String showList(Model model, int boardId) {
+		Board board = boardService.getBoardById(boardId);
+
+		List<Article> articles = articleService.getArticles();
+
+		model.addAttribute("articles", articles);
+		model.addAttribute("board", board);
+
+		return "/usr/article/list";
+	}
+
+	@RequestMapping("/usr/article/write")
+	public String showWrite() {
+		return "/usr/article/write";
 	}
 
 	@RequestMapping("/usr/article/modify")
@@ -50,6 +71,7 @@ public class UserArticleController {
 		return "/usr/article/modify";
 	}
 
+	// Do
 	@RequestMapping("/usr/article/doModify")
 	@ResponseBody
 	public String doModify(HttpServletRequest req, int id, String title, String body) {
@@ -96,19 +118,6 @@ public class UserArticleController {
 			articleService.deleteArticle(id);
 		}
 		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/list");
-	}
-
-	@RequestMapping("/usr/article/list")
-	public String showList(Model model) {
-		List<Article> articles = articleService.getArticles();
-
-		model.addAttribute("articles", articles);
-		return "/usr/article/list";
-	}
-
-	@RequestMapping("/usr/article/write")
-	public String showWrite() {
-		return "/usr/article/write";
 	}
 
 	@RequestMapping("/usr/article/doWrite")
