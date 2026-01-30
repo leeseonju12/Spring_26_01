@@ -19,6 +19,8 @@ public class Article {
 	private String body;
 	private String extra__writer;
 	private String extra__boardCode;
+	private String searchType;
+	private String searchKeyword;
 	private boolean userCanModify;
 	private boolean userCanDelete;
 }

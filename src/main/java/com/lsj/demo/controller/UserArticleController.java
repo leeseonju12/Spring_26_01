@@ -49,24 +49,35 @@ public class UserArticleController {
 
 	@RequestMapping("/usr/article/list")
 	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId,
-			@RequestParam(defaultValue = "1") int page) {
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String searchType,
+			@RequestParam(defaultValue = "") String searchKeyword) {
 		Board board = boardService.getBoardById(boardId);
 
 		if (board == null) {
-			return rq.historyBackOnView("존재하지 않는 게시판입니다"); 
+			return rq.historyBackOnView("존재하지 않는 게시판입니다.");
+		}
+
+		if (!Ut.isEmptyOrNull(searchKeyword)) {
+			if (Ut.isEmptyOrNull(searchType)) {
+				return Ut.jsHistoryBack("F-1", "검색 기준을 선택하세요.");
+			}
 		}
 
 		int articlesCount = articleService.getArticlesCount(boardId);
 		int itemsInAPage = 10;
 		int pagesCount = (int) Math.ceil((double) articlesCount / itemsInAPage);
 
-		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);
-		
+		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, searchType,
+				searchKeyword);
+
 		model.addAttribute("articlesCount", articlesCount);
 		model.addAttribute("articles", articles);
+		model.addAttribute("boardId", boardId);
 		model.addAttribute("board", board);
 		model.addAttribute("page", page);
 		model.addAttribute("pagesCount", pagesCount);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("searchKeyword", searchKeyword);
 
 		return "usr/article/list";
 	}
@@ -83,7 +94,7 @@ public class UserArticleController {
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
 		if (article == null) {
-			return Ut.jsHistoryBack("F-1", Ut.f("%d글이 존재하지 않습니다.", id));
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 글이 존재하지 않습니다.", id));
 		}
 
 		model.addAttribute("article", article);
