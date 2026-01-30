@@ -40,7 +40,51 @@
 				</c:if>
 			</tbody>
 		</table>
+		
+		<!-- 페이지네이션 -->
+		<div class="flex justify-center mt-8">
+			<div class="join">
+				<!-- 처음 -->
+				<c:if test="${page > 1}">
+					<a href="list?boardId=${board.id}&page=1" class="join-item btn btn-square">««</a>
+				</c:if>
+
+				<!-- 이전 -->
+				<c:if test="${page > 1}">
+					<a href="list?boardId=${board.id}&page=${page - 1}" class="join-item btn btn-square">«</a>
+				</c:if>
+
+				<!-- 페이지 번호 [5개의 페이지만 처리] -->
+				<c:set var="startPage" value="${page - 2 > 1 ? page - 2 : 1}" />
+				<c:set var="endPage" value="${page + 2 < pagesCount ? page + 2 : pagesCount}" />
+
+				<c:forEach begin="${startPage}" end="${endPage}" var="i">
+					<c:choose>
+						<c:when test="${i == page}">
+							<a class="join-item btn btn-square btn-active">${i}</a>
+						</c:when>
+						<c:otherwise>
+							<a href="list?boardId=${board.id}&page=${i}" class="join-item btn btn-square">${i}</a>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+
+				<!-- 다음 -->
+				<c:if test="${page < pagesCount}">
+					<a href="list?boardId=${board.id}&page=${page + 1}" class="join-item btn btn-square">»</a>
+				</c:if>
+
+				<!-- 마지막 -->
+				<c:if test="${page < pagesCount}">
+					<a href="list?boardId=${board.id}&page=${pagesCount}" class="join-item btn btn-square">»»</a>
+				</c:if>
+			</div>
+		</div>
+
+		<!-- 게시글 수 표시 -->
+		<div class="text-center mt-4 text-sm text-gray-600">전체 게시글: ${articlesCount}개 | 현재 페이지: ${page}/${pagesCount}</div>
 	</div>
 </section>
+
 
 <%@ include file="../common/foot.jspf"%>
