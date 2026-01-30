@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<c:set var="pageTitle" value="${board.code } LIST"></c:set>
+<c:set var="pageTitle" value="${board.code} LIST"></c:set>
 
 <%@ include file="../common/head.jspf"%>
 
@@ -9,10 +9,12 @@
 <%-- <div>${board }</div> --%>
 <section class="mt-24 text-xl px-4">
 	<div class="mx-auto">
-	<div class="mb-4 text-2xl font-bold">${board.code} 게시판</div>
+		<div>${articlesCount }개</div>
+		<div class="mb-3 text-2xl font-bold">${board.code}게시판</div>
 		<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 			<thead>
 				<tr>
+					<th style="text-align: center;">Board</th>
 					<th style="text-align: center;">ID</th>
 					<th style="text-align: center;">Registration date</th>
 					<th style="text-align: center;">TITLE</th>
@@ -22,6 +24,7 @@
 			<tbody>
 				<c:forEach var="article" items="${articles }">
 					<tr class="hover:bg-base-300">
+						<td style="text-align: center;">${board.code}</td>
 						<td style="text-align: center;">${article.id }</td>
 						<td style="text-align: center;">${article.regDate.substring(0,10) }</td>
 						<td style="text-align: center;">

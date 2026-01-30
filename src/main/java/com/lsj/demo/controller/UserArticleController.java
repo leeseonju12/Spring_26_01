@@ -48,17 +48,22 @@ public class UserArticleController {
 	}
 
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId) {
-
+	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId,
+			@RequestParam(defaultValue = "1") int page) {
 		Board board = boardService.getBoardById(boardId);
 
 		if (board == null) {
-//			return rq.historyBackOnView("존재하지 않는 게시판입니다"); -> 흐름 따라가되 잘 안쓰는 방식
+			return rq.historyBackOnView("존재하지 않는 게시판입니다"); 
 		}
 
-		List<Article> articles = articleService.getForPrintArticles(boardId);
+		int articlesCount = articleService.getArticlesCount(boardId);
+		int itemsInAPage = 10;
+
+		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);
+		
+		model.addAttribute("articlesCount", articlesCount);
 		model.addAttribute("articles", articles);
-		model.addAttribute("boardId", boardId);
+		model.addAttribute("board", board);
 
 		return "usr/article/list";
 	}
@@ -146,7 +151,7 @@ public class UserArticleController {
 		if (Ut.isEmptyOrNull(boardId)) {
 			return Ut.jsHistoryBack("F-3", "게시판을 선택하세요");
 		}
-		
+
 		int boardIdInt = Integer.parseInt(boardId);
 
 		ResultData doWriteRd = articleService.writeArticle(boardId, rq.getLoginedMemberId(), title, body);

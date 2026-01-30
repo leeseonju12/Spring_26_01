@@ -123,7 +123,7 @@ cellphoneNum = '01056785678',
 email = 'abced@gmail.com';
 
 # article 테이블에 회원번호 추가
-ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER regDate;
+ALTER TABLE article ADD COLUMN memberId INT(10) UNSIGNED NOT NULL AFTER updateDate;
 
 
 UPDATE article 
@@ -162,8 +162,51 @@ FROM `member`;
 SELECT *
 FROM board;
 
+SELECT COUNT(*) FROM article;
+
 
 ##===============================###################### 테스트
+
+# article 대량생성 1
+INSERT INTO article
+SET regDate = NOW(),
+memberId = CEILING(RAND() * 2),
+boardId = CEILING(RAND() * 3),
+title = CONCAT('제목', RAND()),
+`body` = CONCAT('내용', RAND());
+
+# article 대량생성 2
+INSERT INTO article
+	(
+		regDate, updateDate, memberId, boardId, title, `body`
+	)
+SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 2, FLOOR(RAND() * 3) + 1, CONCAT('제목__',RAND()), CONCAT('내용__',RAND())
+FROM article;
+
+
+# member 대량생성
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = CONCAT('loginId', SUBSTRING(RAND() * 1000 FROM 1 FOR 2)),
+loginPw = CONCAT('loginPw', SUBSTRING(RAND() * 1000 FROM 1 FOR 2)),
+`name` = CONCAT('name', SUBSTRING(RAND() * 1000 FROM 1 FOR 2));
+
+SELECT FLOOR(RAND() * 2) + 2;
+
+SELECT FLOOR(RAND() * 3) + 1;
+
+SELECT A.*, M.nickname AS extra__writer
+		FROM article AS A
+		INNER JOIN `member` AS M
+		ON A.memberId = M.id
+		WHERE boardId = 3
+		ORDER BY A.id
+		DESC
+		
+SELECT *
+		FROM board
+		WHERE id = 4 AND delStatus = 0
 
 SELECT *
 FROM board
@@ -189,22 +232,9 @@ FROM article AS A
          INNER JOIN `member` AS M
                     ON A.memberId = M.id;
 
-SELECT CEILING(RAND() * 2);
+SELECT CEILING(RAND() * 3);
 
-# article 대량생성
-INSERT INTO article
-SET regDate = NOW(),
-memberId = CEILING(RAND() * 2),
-title = CONCAT('제목', RAND()),
-`body` = CONCAT('내용', RAND());
 
-# member 대량생성
-INSERT INTO `member`
-SET regDate = NOW(),
-updateDate = NOW(),
-loginId = CONCAT('loginId', SUBSTRING(RAND() * 1000 FROM 1 FOR 2)),
-loginPw = CONCAT('loginPw', SUBSTRING(RAND() * 1000 FROM 1 FOR 2)),
-`name` = CONCAT('name', SUBSTRING(RAND() * 1000 FROM 1 FOR 2));
 
 SELECT * FROM `member` WHERE loginId = 'test1';
 
