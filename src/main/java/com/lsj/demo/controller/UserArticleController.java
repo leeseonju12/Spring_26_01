@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.lsj.demo.interceptor.BeforeActionInterceptor;
 import com.lsj.demo.service.ArticleService;
 import com.lsj.demo.service.BoardService;
 import com.lsj.demo.util.Ut;
@@ -21,12 +22,17 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UserArticleController {
+	private final BeforeActionInterceptor beforeActionInterceptor;
 	@Autowired
 	private Rq rq;
 	@Autowired
 	private ArticleService articleService;
 	@Autowired
 	private BoardService boardService;
+
+	UserArticleController(BeforeActionInterceptor beforeActionInterceptor) {
+		this.beforeActionInterceptor = beforeActionInterceptor;
+	}
 
 	// Show
 	@RequestMapping("/usr/article/detail")
@@ -37,33 +43,24 @@ public class UserArticleController {
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
 		model.addAttribute("article", article);
+
 		return "usr/article/detail";
 	}
 
-	/*
-	 * @RequestMapping("/usr/article/list") public String showList(Model model, int
-	 * boardId) { Board board = boardService.getBoardById(boardId);
-	 * 
-	 * List<Article> articles = articleService.getArticles();
-	 * 
-	 * model.addAttribute("articles", articles); model.addAttribute("board", board);
-	 * 
-	 * return "/usr/article/list"; }
-	 */
-	
 	@RequestMapping("/usr/article/list")
 	public String showList(Model model, @RequestParam(defaultValue = "1") int boardId) {
 
-	    int loginedMemberId = rq.getLoginedMemberId();
+		Board board = boardService.getBoardById(boardId);
 
-	    Board board = boardService.getBoardById(boardId);
-	    List<Article> articles = boardService.getForListupBoard(loginedMemberId, boardId);
+		if (board == null) {
+//			return rq.historyBackOnView("존재하지 않는 게시판입니다"); -> 흐름 따라가되 잘 안쓰는 방식
+		}
 
-	    model.addAttribute("board", board);
-	    model.addAttribute("articles", articles);
-	    model.addAttribute("boardId", boardId);
+		List<Article> articles = articleService.getForPrintArticles(boardId);
+		model.addAttribute("articles", articles);
+		model.addAttribute("boardId", boardId);
 
-	    return "usr/article/list";
+		return "usr/article/list";
 	}
 
 	@RequestMapping("/usr/article/write")
@@ -78,7 +75,7 @@ public class UserArticleController {
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
 		if (article == null) {
-			return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 없어", id));
+			return Ut.jsHistoryBack("F-1", Ut.f("%d글이 존재하지 않습니다.", id));
 		}
 
 		model.addAttribute("article", article);
@@ -137,7 +134,7 @@ public class UserArticleController {
 
 	@RequestMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String doWrite(HttpServletRequest req, int boardId, String title, String body) {
+	public String doWrite(HttpServletRequest req, String boardId, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 		if (Ut.isEmptyOrNull(title)) {
@@ -146,8 +143,13 @@ public class UserArticleController {
 		if (Ut.isEmptyOrNull(body)) {
 			return Ut.jsHistoryBack("F-2", "내용을 작성하세요.");
 		}
+		if (Ut.isEmptyOrNull(boardId)) {
+			return Ut.jsHistoryBack("F-3", "게시판을 선택하세요");
+		}
+		
+		int boardIdInt = Integer.parseInt(boardId);
 
-		ResultData doWriteRd = articleService.writeArticle(rq.getLoginedMemberId(), boardId, title, body);
+		ResultData doWriteRd = articleService.writeArticle(boardId, rq.getLoginedMemberId(), title, body);
 
 		int id = (int) doWriteRd.getData1();
 

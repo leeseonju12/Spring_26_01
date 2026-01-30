@@ -6,47 +6,37 @@
 <%@ include file="../common/head.jspf"%>
 
 <hr />
-
-<section class="mt-8 text-xl px-4">
+<section class="mt-24 text-xl px-4">
 	<div class="mx-auto">
 		<form action="../article/doWrite" method="POST">
-			<input type="hidden" name="boardId" id="boardIdInput" value="" />
 			<table class="table" border="1" style="width: 100%; border-collapse: collapse;">
 				<tbody>
 					<tr>
-						<th style="width: 20%;">게시판</th>
-						<td style="padding: 10px;">
-							<div class="dropdown dropdown-right dropdown-end">
-								<div tabindex="0" role="button" class="btn btn-sm m-1" id="boardDropdownBtn">게시판을 선택하세요. 👉🏻</div>
-								<ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-									<li>
-										<a href="#" onclick="selectBoard(1, 'NOTICE'); return false;">NOTICE</a>
-									</li>
-									<li>
-										<a href="#" onclick="selectBoard(2, 'FREE'); return false;">FREE</a>
-									</li>
-									<li>
-										<a href="#" onclick="selectBoard(3, 'QnA'); return false;">QnA</a>
-									</li>
-								</ul>
-							</div>
+						<th style="text-align: center;">게시판</th>
+						<td style="text-align: center;">
+							<select class="select select-success" name="boardId">
+								<option value="" disabled selected>게시판을 선택하세요.</option>
+								<option value="1">NOTICE</option>
+								<option value="2">FREE</option>
+								<option value="3">QnA</option>
+							</select>
 						</td>
 					</tr>
 					<tr>
-						<th>제목</th>
-						<td style="padding: 10px;">
+						<th style="text-align: center;">제목</th>
+						<td style="text-align: center;">
 							<input class="input input-neutral input-sm" name="title" autocomplete="off" type="text" placeholder="제목을 입력하세요." />
 						</td>
 					</tr>
 					<tr>
-						<th style="width: 50%;">내용</th>
-						<td style="padding: 10px;">
+						<th style="text-align: center;">내용</th>
+						<td style="text-align: center;">
 							<input class="input input-neutral input-sm" name="body" type="text" autocomplete="off" placeholder="내용을 입력하세요." />
 						</td>
 					</tr>
 					<tr>
 						<th></th>
-						<td>
+						<td style="text-align: center;">
 							<input class="btn btn-soft btn-success" type="submit" value="작성 완료" />
 						</td>
 					</tr>
@@ -58,13 +48,5 @@
 		</div>
 	</div>
 </section>
-
-<script>
-	function selectBoard(boardId, boardName) {
-		document.getElementById('boardIdInput').value = boardId;
-		document.getElementById('boardDropdownBtn').innerText = boardName + ' 👉🏻';
-		document.activeElement.blur();
-	}
-</script>
 
 <%@ include file="../common/foot.jspf"%>

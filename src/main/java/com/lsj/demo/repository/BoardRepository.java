@@ -10,6 +10,5 @@ import java.util.List;
 public interface BoardRepository {
 
 	public Board getBoardById(int id);
-	public List<Article> getForListupBoard(int boardId);
 
 }

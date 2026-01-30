@@ -20,12 +20,15 @@ public class ArticleService {
 		this.articleRepository = articleRepository;
 	}
 
-	public ResultData writeArticle(int loginedMemberId, int boardId, String title, String body) {
-		articleRepository.writeArticle(loginedMemberId, boardId, title, body);
+	public ResultData writeArticle(String boardId, int loginedMemberId, String title, String body) {
+
+		articleRepository.writeArticle(boardId, loginedMemberId, title, body);
+
 		int id = articleRepository.getLastInsertId();
+
 		return ResultData.from("S-1", Ut.f("%d번 게시글이 작성되었습니다.", id), "이번에 쓰여진 글의 id", id);
 	}
-	
+
 	public ResultData userCanModify(int loginedMemberId, Article article) {
 
 		if (article.getMemberId() != loginedMemberId) {
@@ -46,7 +49,7 @@ public class ArticleService {
 	public void deleteArticle(int id) {
 		articleRepository.deleteArticle(id);
 	}
-	
+
 	public Article getForPrintArticle(int loginedMemberId, int id) {
 
 		Article article = articleRepository.getForPrintArticle(id);
@@ -63,6 +66,7 @@ public class ArticleService {
 
 		ResultData userCanModifyRd = userCanModify(loginedMemberId, article);
 		article.setUserCanModify(userCanModifyRd.isSuccess());
+
 		ResultData userCanDeleteRd = userCanDelete(loginedMemberId, article);
 		article.setUserCanDelete(userCanDeleteRd.isSuccess());
 	}
@@ -78,6 +82,10 @@ public class ArticleService {
 
 	public List<Article> getArticles() {
 		return articleRepository.getArticles();
+	}
+
+	public List<Article> getForPrintArticles(int boardId) {
+		return articleRepository.getForPrintArticles(boardId);
 	}
 
 }

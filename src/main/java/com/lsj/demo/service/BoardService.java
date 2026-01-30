@@ -23,19 +23,4 @@ public class BoardService {
 		return boardRepository.getBoardById(boardId);
 	}
 
-	public List<Article> getForListupBoard(int loginedMemberId, int boardId) {
-		List<Article> articles = boardRepository.getForListupBoard(boardId);
-
-		// 필요시 각 글에 대한 권한 체크
-		for (Article article : articles) {
-			controlForPrintData(loginedMemberId, article);
-		}
-
-		return articles;
-	}
-
-	private void controlForPrintData(int loginedMemberId, Article article) {
-		// 권한 체크 로직 구현
-	}
-
 }

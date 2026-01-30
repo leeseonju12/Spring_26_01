@@ -44,13 +44,13 @@ public class Rq {
 		resp.setContentType("text/html; charset=UTF-8");
 
 		println("<script>");
-		
+
 		println("console.log(123);");
-		
+
 		if (!Ut.isEmpty(msg)) {
 			println("alert('" + msg.replace("'", "\\'") + "');");
 		}
-		
+
 		println("console.log(456);");
 
 		println("history.back();");
@@ -78,4 +78,11 @@ public class Rq {
 	public void initBeforeActionInterceptor() {
 		System.err.println("initBeforeActionInterceptor 실행됨");
 	}
+
+	public String historyBackOnView(String msg) {
+		req.setAttribute("msg", msg);
+		req.setAttribute("historyBack", true);
+		return "usr/common/js";
+	}
+
 }

@@ -20,5 +20,4 @@ public class Board {
 	private String name;
 	private boolean delStatus;
 	private LocalDateTime delDate;
-	private String extra__id;
 }

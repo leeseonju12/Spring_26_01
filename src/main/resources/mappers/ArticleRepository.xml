@@ -11,8 +11,7 @@
 		updateDate = NOW(),
 		boardId = #{boardId},
 		memberId = #{memberId},
-		title =
-		#{title},
+		title = #{title},
 		body = #{body}
 	</insert>
 
@@ -36,10 +35,6 @@
 		WHERE id = #{id}
 	</update>
 
-	<!-- <select id="getForPrintArticle" parameterType="int" resultType="com.lsj.demo.vo.Article"> 
-		SELECT A.*, M.nickname AS extra__writer FROM article AS A INNER JOIN `member` 
-		AS M ON A.memberId = M.id WHERE A.id = #{id} </select> -->
-
 	<select id="getForPrintArticle" parameterType="int"
 		resultType="com.lsj.demo.vo.Article">
 		SELECT A.*, M.nickname AS extra__writer, B.code AS extra__boardCode
@@ -59,13 +54,23 @@
 		#{id}
 	</select>
 
-	<select id="getArticles" resultType="com.lsj.demo.vo.Article">
-		SELECT A.*, M.nickname AS
-		extra__writer
+	<select id="getForPrintArticles"
+		resultType="com.lsj.demo.vo.Article">
+		SELECT A.*, M.nickname AS extra__writer
 		FROM article AS A
 		INNER JOIN `member` AS M
-		ON A.memberId =
-		M.id
+		ON A.memberId = M.id
+		WHERE boardId = #{boardId}
+		ORDER BY A.id
+		DESC
+	</select>
+
+	<select id="getArticles"
+		resultType="com.lsj.demo.vo.Article">
+		SELECT A.*, M.nickname AS extra__writer
+		FROM article AS A
+		INNER JOIN `member` AS M
+		ON A.memberId = M.id
 		ORDER BY A.id
 		DESC
 	</select>
