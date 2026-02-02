@@ -19,6 +19,7 @@ import com.lsj.demo.vo.ResultData;
 import com.lsj.demo.vo.Rq;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserArticleController {
@@ -36,10 +37,12 @@ public class UserArticleController {
 
 	// Show
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(HttpServletRequest req, Model model, int id) {
+	public String showDetail(HttpServletRequest req, HttpSession session, Model model, int id) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
-
+		
+		articleService.increaseHitCount(id);
+		
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
 		model.addAttribute("article", article);
