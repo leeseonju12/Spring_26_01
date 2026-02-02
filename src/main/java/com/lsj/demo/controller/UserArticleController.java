@@ -62,7 +62,8 @@ public class UserArticleController {
 		int itemsInAPage = 10;
 		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
 
-		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page);
+		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, searchKeywordTypeCode,
+				searchKeyword);
 		
 		model.addAttribute("articlesCount", articlesCount);
 		model.addAttribute("articles", articles);
@@ -71,6 +72,7 @@ public class UserArticleController {
 		model.addAttribute("page", page);
 		model.addAttribute("pagesCount", pagesCount);
 		model.addAttribute("searchKeyword", searchKeyword);
+		model.addAttribute("searchKeywordTypeCode", searchKeywordTypeCode);
 
 		return "usr/article/list";
 	}
