@@ -70,7 +70,7 @@
 		<!-- 	동적 페이징 -->
 		<div class="flex justify-center mt-4">
 			<div class="btn-group join">
-				<c:set var="paginationLen" value="5" />
+				<c:set var="paginationLen" value="3" />
 				<c:set var="startPage" value="${page - paginationLen >= 1 ? page - paginationLen : 1}" />
 				<c:set var="endPage" value="${page + paginationLen <= pagesCount ?  page + paginationLen : pagesCount}" />
 
