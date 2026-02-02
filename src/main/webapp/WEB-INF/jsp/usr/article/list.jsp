@@ -12,24 +12,26 @@
 
 		<!-- 검색 폼 -->
 		<form action="list" method="get" class="mb-4">
-			<input type="hidden" name="boardId" value="${board.id}" />
+			<input type="hidden" name="boardId" value="${param.boardId}" />
 			<div class="flex gap-2 justify-center items-center">
-				<select class="select select-bordered select-sm" name="searchType">
+				<select class="select select-sm select-bordered
+						max-w-xs" name="searchKeywordTypeCode"
+					data-value="${param.searchKeywordTypeCode } ">
 					<option value="" disabled selected>검색 기준</option>
-					<option value="title" ${searchType == 'title' ? 'selected' : ''}>제목</option>
-					<option value="body" ${searchType == 'body' ? 'selected' : ''}>내용</option>
-					<option value="writer" ${searchType == 'writer' ? 'selected' : ''}>작성자</option>
+					<option value="title">제목</option>
+					<option value="body">내용</option>
+					<option value="title,body">제목 + 내용</option>
+					<option value="nickname">작성자</option>
 				</select>
+				<label class="ml-3 input input-bordered input-sm w-64 flex items-center gap-2">
+					<input type="text" placeholder="검색어를 입력하세요" name="searchKeyword" value="${param.searchKeyword }" />
 
-				<input class="input input-bordered input-sm w-64" name="searchKeyword" value="${searchKeyword}" autocomplete="off"
-					type="text" placeholder="검색어를 입력하세요" />
+					<button type="submit" class="btn btn-sm btn-success">검색</button>
 
-				<button type="submit" class="btn btn-sm btn-success">검색</button>
-
-				<!-- 검색 초기화 버튼 (검색어가 있을 때만 표시) -->
-				<c:if test="${not empty searchKeyword}">
-					<a href="list?boardId=${board.id}" class="btn btn-sm btn-ghost">초기화</a>
-				</c:if>
+					<!-- 검색 초기화 버튼 (검색어가 있을 때만 표시) -->
+					<c:if test="${not empty searchKeyword}">
+						<a href="list?boardId=${board.id}" class="btn btn-sm btn-ghost">초기화</a>
+					</c:if>
 			</div>
 		</form>
 
@@ -68,7 +70,7 @@
 		</table>
 
 		<!-- 	동적 페이징 -->
-		<div class="flex justify-center mt-4">
+		<div class="flex justify-center mt-8">
 			<div class="btn-group join">
 				<c:set var="paginationLen" value="3" />
 				<c:set var="startPage" value="${page - paginationLen >= 1 ? page - paginationLen : 1}" />
@@ -99,7 +101,6 @@
 
 			</div>
 		</div>
-
 </section>
 
 
