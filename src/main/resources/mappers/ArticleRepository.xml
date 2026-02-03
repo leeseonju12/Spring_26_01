@@ -77,7 +77,11 @@
 		WHERE id = #{id}
 	</update>
 
-
+	<select id="getArticleHitCount" parameterType="int">
+		SELECT hitCount
+		FROM article
+		WHERE id = #{id}
+	</select>
 
 	<select id="getForPrintArticle" parameterType="int"
 		resultType="com.lsj.demo.vo.Article">
@@ -140,7 +144,8 @@
 		extra__writer
 		FROM article AS A
 		INNER JOIN `member` AS M
-		ON A.memberId = M.id
+		ON A.memberId =
+		M.id
 		ORDER BY A.id
 		DESC
 	</select>

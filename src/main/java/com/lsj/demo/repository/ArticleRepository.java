@@ -20,4 +20,5 @@ public interface ArticleRepository {
 			String searchKeyword);
 	public int getArticlesCount(int boardId, String searchKeywordTypeCode, String searchKeyword);
 	public int increaseHitCount(int id);
+	public int getArticleHitCount(int id);
 }

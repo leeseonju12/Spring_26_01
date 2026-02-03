@@ -7,6 +7,32 @@
 
 <hr />
 
+<!-- <iframe src="http://localhost:8080/usr/article/doIncreaseHitCount?id=2" frameborder="0"></iframe> -->
+<!-- Ajax 적용 -->
+<script>
+	const params = {};
+	params.id = parseInt('${param.id}');
+</script>
+
+<script>
+	function ArticleDetail__doIncreaseHitCount() {
+		$.get('../article/doIncreaseHitCountRd', {
+			id : params.id,
+			ajaxMode : 'Y'
+		}, function(data) {
+			$('.article-dtail__hit-count').html(data.data1);
+			console.log(data);
+			console.log('data.msg : ' + data.msg);
+			console.log('data.data1 : ' + data.data1);
+		}, 'json')
+	}
+
+	$(function() {
+		ArticleDetail__doIncreaseHitCount();
+		// 		setTimeout(ArticleDetail__doIncreaseHitCount, 2000);
+	})
+</script>
+
 <section class="mt-24 text-xl px-4">
 	<div class="mx-auto">
 		<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
@@ -32,8 +58,10 @@
 					<td style="text-align: center;">${article.boardId}</td>
 				</tr>
 				<tr>
-					<th style="text-align: center;">VIEW</th>
-					<td style="text-align: center;">${article.hitCount }</td>
+					<th style="text-align: center;">View</th>
+					<td style="text-align: center;">
+						<span class="article-dtail__hit-count">${article.hitCount }</span>
+					</td>
 				</tr>
 				<tr>
 					<th style="text-align: center;">Title</th>
