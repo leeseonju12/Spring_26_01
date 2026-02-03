@@ -12,12 +12,15 @@ import com.lsj.demo.vo.ResultData;
 
 @Service
 public class ArticleService {
+	
+	private final BoardService boardService;
 
 	@Autowired
 	private ArticleRepository articleRepository;
 
-	public ArticleService(ArticleRepository articleRepository) {
+	public ArticleService(ArticleRepository articleRepository, BoardService boardService) {
 		this.articleRepository = articleRepository;
+		this.boardService = boardService;
 	}
 
 	public ResultData writeArticle(String boardId, int loginedMemberId, String title, String body) {
@@ -102,8 +105,17 @@ public class ArticleService {
 		return articleRepository.getArticlesCount(boardId, searchKeywordTypeCode, searchKeyword);
 	}
 	
-	public void increaseHitCount(int id) {
-	    articleRepository.increaseHitCount(id);
+	public ResultData increaseHitCount(int id) {
+
+		int affectedRow = articleRepository.increaseHitCount(id);
+
+//		System.err.println("affectedRow : " + affectedRow);
+
+		if (affectedRow == 0) {
+			return ResultData.from("F-1", "해당 게시글은 존재하지 않습니다.", "id", id);
+		}
+
+		return ResultData.from("S-1", "조회수 증가", "id", id);
 	}
 
 }

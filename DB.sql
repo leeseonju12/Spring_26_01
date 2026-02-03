@@ -149,6 +149,8 @@ UPDATE article
 SET boardId = 3
 WHERE id = 5;
 
+ALTER TABLE article ADD COLUMN hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER `body`;
+
 DESC article;
 
 # -------------------SELECT 확인용
@@ -166,6 +168,46 @@ SELECT COUNT(*) FROM article;
 
 
 ##===============================###################### 테스트
+'111'
+
+SELECT COUNT(*) AS cnt
+FROM article
+WHERE boardId = 1 AND title LIKE '%111%';
+
+SELECT COUNT(*) AS cnt
+FROM article
+WHERE boardId = 1 AND `body` LIKE '%111%';
+
+SELECT *
+FROM article
+WHERE boardId = 2 AND title LIKE '%11%';
+
+SELECT *
+FROM article
+WHERE boardId = 2 AND `body` LIKE '%111%';
+
+SELECT *
+FROM article
+WHERE boardId = 1 AND title LIKE '%11%' OR `body` LIKE '%11%';
+
+
+SELECT COUNT(*)
+FROM article
+WHERE boardId = 1;
+
+SELECT *
+FROM article
+WHERE boardId = 2
+ORDER BY id DESC
+LIMIT 0, 10;
+
+
+SELECT *
+FROM article
+WHERE boardId = 2
+ORDER BY id DESC
+LIMIT 10, 10;
+
 
 # article 대량생성 1
 INSERT INTO article

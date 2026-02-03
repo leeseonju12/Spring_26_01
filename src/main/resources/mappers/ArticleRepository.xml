@@ -9,10 +9,11 @@
 		SET
 		regDate = NOW(),
 		updateDate = NOW(),
-		boardId = #{boardId},
-		memberId =
-		#{memberId},
-		title = #{title},
+		memberId = #{memberId},
+		boardId =
+		#{boardId},
+		title =
+		#{title},
 		body = #{body}
 	</insert>
 
@@ -32,6 +33,7 @@
 					AND A.title LIKE CONCAT('%', #{searchKeyword}, '%')
 				</when>
 				<when test="searchKeywordTypeCode == 'body'">
+					AND A.`body` LIKE CONCAT('%', #{searchKeyword}, '%')
 				</when>
 				<when test="searchKeywordTypeCode == 'nickname'">
 					AND M.nickname LIKE CONCAT('%', #{searchKeyword},
@@ -68,17 +70,23 @@
 		WHERE id = #{id}
 	</update>
 
+	<update id="increaseHitCount" parameterType="int">
+		UPDATE article
+		SET
+		hitCount = hitCount + 1
+		WHERE id = #{id}
+	</update>
+
+
+
 	<select id="getForPrintArticle" parameterType="int"
 		resultType="com.lsj.demo.vo.Article">
-		SELECT A.*, M.nickname AS extra__writer, B.code AS
-		extra__boardCode
+		SELECT A.*, M.nickname AS extra__writer
 		FROM article AS A
 		INNER JOIN `member` AS M
-		ON A.memberId
-		= M.id
-		INNER JOIN board AS B
-		ON A.boardId = B.id
-		WHERE A.id = #{id}
+		ON A.memberId = M.id
+		WHERE A.id =
+		#{id}
 	</select>
 
 	<select id="getArticleById" parameterType="int"
@@ -120,7 +128,6 @@
 				</otherwise>
 			</choose>
 		</if>
-
 		ORDER BY A.id
 		DESC
 		<if test="limitFrom >= 0">
@@ -133,18 +140,9 @@
 		extra__writer
 		FROM article AS A
 		INNER JOIN `member` AS M
-		ON A.memberId =
-		M.id
+		ON A.memberId = M.id
 		ORDER BY A.id
 		DESC
 	</select>
-	
-	<update id="increaseHitCount">
-    UPDATE article
-    SET hitCount = hitCount + 1
-    WHERE id = #{id}
-</update>
-
-
 
 </mapper>

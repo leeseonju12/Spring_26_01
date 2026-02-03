@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.lsj.demo.DemoApplication;
 import com.lsj.demo.interceptor.BeforeActionInterceptor;
 import com.lsj.demo.service.ArticleService;
 import com.lsj.demo.service.BoardService;
@@ -19,10 +20,10 @@ import com.lsj.demo.vo.ResultData;
 import com.lsj.demo.vo.Rq;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserArticleController {
+	private final DemoApplication demoApplication;
 	private final BeforeActionInterceptor beforeActionInterceptor;
 	@Autowired
 	private Rq rq;
@@ -31,17 +32,26 @@ public class UserArticleController {
 	@Autowired
 	private BoardService boardService;
 
-	UserArticleController(BeforeActionInterceptor beforeActionInterceptor) {
+	UserArticleController(BeforeActionInterceptor beforeActionInterceptor, DemoApplication demoApplication) {
 		this.beforeActionInterceptor = beforeActionInterceptor;
+		this.demoApplication = demoApplication;
 	}
 
 	// Show
 	@RequestMapping("/usr/article/detail")
-	public String showDetail(HttpServletRequest req, HttpSession session, Model model, int id) {
+	public String showDetail(HttpServletRequest req, Model model, int id) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 		
-		articleService.increaseHitCount(id);
+		ResultData increaseHitCountRd = articleService.increaseHitCount(id);
+
+//		System.out.println(increaseHitCountRd.toString());
+
+//		System.out.println(increaseHitCountRd.isFail());
+
+		if (increaseHitCountRd.isFail()) {
+			return rq.historyBackOnView(increaseHitCountRd.getMsg());
+		}
 		
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
