@@ -150,4 +150,28 @@
 		DESC
 	</select>
 
+	<!-- 좋아요/싫어요 처리 -->
+	<insert id="doReaction">
+		INSERT INTO reactionPoint
+		SET regDate = NOW(),
+		updateDate = NOW(),
+		relTypeCode = 'article',
+		relId = #{articleId},
+		memberId = #{memberId},
+		`point` =
+		CASE
+		WHEN #{reactionType} = 'like' THEN 1
+		WHEN #{reactionType} = 'dislike' THEN -1
+		ELSE 0
+		END
+		ON DUPLICATE KEY UPDATE
+		updateDate = NOW(),
+		`point` =
+		CASE
+		WHEN #{reactionType} = 'like' THEN 1
+		WHEN #{reactionType} = 'dislike' THEN -1
+		ELSE 0
+		END
+	</insert>
+
 </mapper>

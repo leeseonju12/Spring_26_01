@@ -41,4 +41,5 @@ public class ResultData<DT> {
 		return from(rd.getResultCode(), rd.getMsg(), dataName, newData);
 	
 	}
+
 }

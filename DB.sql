@@ -151,9 +151,72 @@ WHERE id = 5;
 
 ALTER TABLE article ADD COLUMN hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER `body`;
 
+# reactionPoint 테이블 생성
+
+CREATE TABLE reactionPoint (
+	 id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	 regDate DATETIME NOT NULL,
+	 updateDate DATETIME NOT NULL,
+	 memberId INT(10) UNSIGNED NOT NULL,
+	 relTypeCode CHAR(50) NOT NULL COMMENT '관련 데이터 타입 코드',
+	 relId INT(10) NOT NULL COMMENT '관련 데이터 번호',
+	 `point` INT(10) NOT NULL
+);
+
+# reactionPoint 테스트 데이터 생성
+# 1번 회원이 1번 글에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 1,
+relTypeCode = 'article',
+relId = 1,
+`point` = -1;
+
+# 1번 회원이 2번 글에 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 1,
+relTypeCode = 'article',
+relId = 2,
+`point` = 1;
+
+# 2번 회원이 1번 글에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 1,
+`point` = -1;
+
+# 2번 회원이 2번 글에 싫어요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 2,
+relTypeCode = 'article',
+relId = 2,
+`point` = -1;
+
+# 3번 회원이 1번 글에 좋아요
+INSERT INTO reactionPoint
+SET regDate = NOW(),
+updateDate = NOW(),
+memberId = 3,
+relTypeCode = 'article',
+relId = 1,
+`point` = 1;
+
+
 DESC article;
 
 # -------------------SELECT 확인용
+
+
+SELECT *
+FROM reactionPoint;
 
 SELECT *
 FROM article ORDER BY id DESC;
@@ -168,7 +231,14 @@ SELECT COUNT(*) FROM article;
 
 
 ##===============================###################### 테스트
+
+SELECT hitCount
+FROM article
+WHERE id = 1;
+
 '111'
+
+UPDATE article SET hitCount = hitCount + 1 WHERE id = 6;
 
 SELECT COUNT(*) AS cnt
 FROM article
@@ -188,18 +258,18 @@ WHERE boardId = 2 AND `body` LIKE '%111%';
 
 SELECT *
 FROM article
-WHERE boardId = 1 AND title LIKE '%11%' OR `body` LIKE '%11%';
+WHERE boardId = 1 AND title LIKE '%11%' or `body` LIKE '%11%';
 
 
-SELECT COUNT(*)
-FROM article
-WHERE boardId = 1;
+select count(*)
+from article
+where boardId = 1;
 
 SELECT *
 FROM article
 WHERE boardId = 2
 ORDER BY id DESC
-LIMIT 0, 10;
+limit 0, 10;
 
 
 SELECT *
@@ -222,8 +292,8 @@ INSERT INTO article
 	(
 		regDate, updateDate, memberId, boardId, title, `body`
 	)
-SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 2, FLOOR(RAND() * 3) + 1, CONCAT('제목__',RAND()), CONCAT('내용__',RAND())
-FROM article;
+select now(), now(), floor(RAND() * 2) + 2, floor(RAND() * 3) + 1, concat('제목__',rand()), CONCAT('내용__',RAND())
+from article;
 
 
 # member 대량생성
@@ -250,9 +320,9 @@ SELECT *
 		FROM board
 		WHERE id = 4 AND delStatus = 0
 
-SELECT *
-FROM board
-WHERE id = 3;
+select *
+from board
+where id = 3;
 
 SELECT LAST_INSERT_ID();
 
