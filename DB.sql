@@ -209,8 +209,24 @@ relTypeCode = 'article',
 relId = 1,
 `point` = 1;
 
+# article 테이블에 reactionPoint(좋아요) 컬럼 추가
+ALTER TABLE article ADD COLUMN goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE article ADD COLUMN badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0;
 
-DESC article;
+# update join -> 하나의 테이블의 데이터를 기반으로 다른 테이블의 컬럼에 추가
+# -> 기존 게시글의 good bad RP 값을 RP 테이블에서 추출해서 article 테이블에 채우기
+
+UPDATE article AS A
+INNER JOIN (
+	SELECT RP.relTypeCode, RP.relId,
+	SUM(IF(RP.point > 0, RP.point ,0)) AS goodReactionPoint,
+	SUM(IF(RP.point < 0, RP.point * -1 ,0)) AS badReactionPoint
+	FROM reactionPoint AS RP
+	GROUP BY RP.relTypeCode, RP.relId
+) AS RP_SUM
+ON A.id = RP_SUM.relId
+SET A.goodReactionPoint = RP_SUM.goodReactionPoint,
+A.badReactionPoint = RP_SUM.badReactionPoint;
 
 # -------------------SELECT 확인용
 

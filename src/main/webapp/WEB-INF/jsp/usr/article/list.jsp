@@ -53,6 +53,9 @@
 					<th style="text-align: center;">TITLE</th>
 					<th style="text-align: center;">Writer</th>
 					<th style="text-align: center;">Views</th>
+					<th style="text-align: center;">sumRP</th>
+					<th style="text-align: center;">goodRP</th>
+					<th style="text-align: center;">badRP</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -66,6 +69,9 @@
 						</td>
 						<td style="text-align: center;">${article.extra__writer }</td>
 						<td style="text-align: center;">${article.hitCount }</td>
+						<td style="text-align: center;">${article.extra__sumReactionPoint }</td>
+						<td style="text-align: center;">${article.extra__goodReactionPoint }</td>
+						<td style="text-align: center;">${article.extra__badReactionPoint }</td>
 					</tr>
 				</c:forEach>
 			</tbody>
