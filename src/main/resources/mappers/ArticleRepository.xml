@@ -83,12 +83,32 @@
 		WHERE id = #{id}
 	</select>
 
+	<!-- SELECT A.*, M.nickname AS extra__writer, -->
+	<!-- IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint, -->
+	<!-- IFNULL(SUM(IF(RP.point > 0, RP.point ,0)),0) AS extra__goodReactionPoint, -->
+	<!-- IFNULL(SUM(IF(RP.point < 0, RP.point ,0)),0) AS extra__badReactionPoint -->
+	<!-- FROM article AS A -->
+	<!-- INNER JOIN `member` AS M -->
+	<!-- ON A.memberId = M.id -->
+	<!-- LEFT JOIN reactionPoint AS RP -->
+	<!-- ON A.id = RP.relId AND RP.relTypeCode = 'article' -->
+	<!-- GROUP BY A.id -->
+	<!-- ORDER BY A.id DESC; -->
 	<select id="getForPrintArticle" parameterType="int"
 		resultType="com.lsj.demo.vo.Article">
-		SELECT A.*, M.nickname AS extra__writer
+		SELECT A.*, M.nickname AS extra__writer,
+		IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
+		IFNULL(SUM(IF(RP.point &gt; 0, RP.point ,0)),0) AS
+		extra__goodReactionPoint,
+		IFNULL(SUM(IF(RP.point &lt; 0, RP.point
+		,0)),0) AS extra__badReactionPoint
 		FROM article AS A
-		INNER JOIN `member` AS M
+		INNER JOIN `member`
+		AS M
 		ON A.memberId = M.id
+		LEFT JOIN reactionPoint AS RP
+		ON A.id =
+		RP.relId AND RP.relTypeCode = 'article'
 		WHERE A.id =
 		#{id}
 	</select>
@@ -149,29 +169,5 @@
 		ORDER BY A.id
 		DESC
 	</select>
-
-	<!-- 좋아요/싫어요 처리 -->
-	<insert id="doReaction">
-		INSERT INTO reactionPoint
-		SET regDate = NOW(),
-		updateDate = NOW(),
-		relTypeCode = 'article',
-		relId = #{articleId},
-		memberId = #{memberId},
-		`point` =
-		CASE
-		WHEN #{reactionType} = 'like' THEN 1
-		WHEN #{reactionType} = 'dislike' THEN -1
-		ELSE 0
-		END
-		ON DUPLICATE KEY UPDATE
-		updateDate = NOW(),
-		`point` =
-		CASE
-		WHEN #{reactionType} = 'like' THEN 1
-		WHEN #{reactionType} = 'dislike' THEN -1
-		ELSE 0
-		END
-	</insert>
 
 </mapper>

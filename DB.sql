@@ -232,6 +232,91 @@ SELECT COUNT(*) FROM article;
 
 ##===============================###################### 테스트
 
+SELECT A.*, M.nickname AS extra__writer
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+
+# join 버전
+SELECT A.*, M.nickname AS extra__writer,
+IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
+IFNULL(SUM(IF(RP.point > 0, RP.point ,0)),0) AS extra__goodReactionPoint,
+IFNULL(SUM(IF(RP.point < 0, RP.point ,0)),0) AS extra__badReactionPoint
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+LEFT JOIN reactionPoint AS RP
+ON A.id = RP.relId AND RP.relTypeCode = 'article'
+GROUP BY A.id
+ORDER BY A.id DESC;
+
+# join 버전
+SELECT A.*, M.nickname AS extra__writer,
+IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
+IFNULL(SUM(IF(RP.point > 0, RP.point ,0)),0) AS extra__goodReactionPoint,
+IFNULL(SUM(IF(RP.point < 0, RP.point ,0)),0) AS extra__badReactionPoint
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+LEFT JOIN reactionPoint AS RP
+ON A.id = RP.relId AND RP.relTypeCode = 'article'
+WHERE A.id = 1;
+
+
+
+# LEFT JOIN 버전
+SELECT A.*, M.nickname AS extra__writer, RP.point
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+LEFT JOIN reactionPoint AS RP
+ON A.id = RP.relId AND RP.relTypeCode = 'article'
+GROUP BY A.id
+ORDER BY A.id DESC;
+
+
+# 서브쿼리 버전
+SELECT A.*,
+IFNULL(SUM(RP.point),0) AS extra__sumReactionPoint,
+IFNULL(SUM(IF(RP.point > 0, RP.point ,0)),0) AS extra__goodReactionPoint,
+IFNULL(SUM(IF(RP.point < 0, RP.point ,0)),0) AS extra__badReactionPoint
+FROM (
+	SELECT A.*, M.nickname AS extra__writer
+	FROM article AS A
+	INNER JOIN `member` AS M
+	ON A.memberId = M.id
+) AS A
+LEFT JOIN reactionPoint AS RP
+ON A.id = RP.relId AND RP.relTypeCode = 'article'
+GROUP BY A.id
+ORDER BY A.id DESC;
+
+
+
+SELECT A.*, M.nickname AS extra__writer, RP.point
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+LEFT JOIN reactionPoint AS RP
+ON A.id = RP.relId AND RP.relTypeCode = 'article'
+WHERE A.id = 1;
+
+SELECT A.*, M.nickname AS extra__writer, RP.point
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+INNER JOIN reactionPoint AS RP
+ON A.id = RP.relId AND RP.relTypeCode = 'article'
+WHERE A.id = 2;
+
+SELECT A.*, M.nickname AS extra__writer, RP.point
+FROM article AS A
+INNER JOIN `member` AS M
+ON A.memberId = M.id
+INNER JOIN reactionPoint AS RP
+ON A.id = RP.relId AND RP.relTypeCode = 'article'
+WHERE A.id = 3;
+
 SELECT hitCount
 FROM article
 WHERE id = 1;
@@ -258,18 +343,18 @@ WHERE boardId = 2 AND `body` LIKE '%111%';
 
 SELECT *
 FROM article
-WHERE boardId = 1 AND title LIKE '%11%' or `body` LIKE '%11%';
+WHERE boardId = 1 AND title LIKE '%11%' OR `body` LIKE '%11%';
 
 
-select count(*)
-from article
-where boardId = 1;
+SELECT COUNT(*)
+FROM article
+WHERE boardId = 1;
 
 SELECT *
 FROM article
 WHERE boardId = 2
 ORDER BY id DESC
-limit 0, 10;
+LIMIT 0, 10;
 
 
 SELECT *
@@ -292,8 +377,8 @@ INSERT INTO article
 	(
 		regDate, updateDate, memberId, boardId, title, `body`
 	)
-select now(), now(), floor(RAND() * 2) + 2, floor(RAND() * 3) + 1, concat('제목__',rand()), CONCAT('내용__',RAND())
-from article;
+SELECT NOW(), NOW(), FLOOR(RAND() * 2) + 2, FLOOR(RAND() * 3) + 1, CONCAT('제목__',RAND()), CONCAT('내용__',RAND())
+FROM article;
 
 
 # member 대량생성
@@ -320,9 +405,9 @@ SELECT *
 		FROM board
 		WHERE id = 4 AND delStatus = 0
 
-select *
-from board
-where id = 3;
+SELECT *
+FROM board
+WHERE id = 3;
 
 SELECT LAST_INSERT_ID();
 

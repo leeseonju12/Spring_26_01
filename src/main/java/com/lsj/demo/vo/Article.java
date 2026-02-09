@@ -22,6 +22,10 @@ public class Article {
 	private String extra__writer;
 	private String searchType;
 	private String searchKeyword;
+	
+	private String extra__goodReactionPoint;
+	private String extra__badReactionPoint;
+	private String extra__sumReactionPoint;
 	private boolean userCanModify;
 	private boolean userCanDelete;
 }
