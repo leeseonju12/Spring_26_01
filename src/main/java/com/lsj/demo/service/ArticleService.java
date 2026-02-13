@@ -122,4 +122,14 @@ public class ArticleService {
 		return articleRepository.getArticleHitCount(id);
 	}
 	
+	public ResultData increaseGoodReactionPoint(int relId) {
+		int affectedRow = articleRepository.increaseGoodReactionPoint(relId);
+
+		if (affectedRow == 0) {
+			return ResultData.from("F-1", "없는 게시글");
+		}
+
+		return ResultData.from(null, null);
+	}
+	
 }

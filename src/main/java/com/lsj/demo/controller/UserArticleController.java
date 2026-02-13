@@ -13,6 +13,7 @@ import com.lsj.demo.DemoApplication;
 import com.lsj.demo.interceptor.BeforeActionInterceptor;
 import com.lsj.demo.service.ArticleService;
 import com.lsj.demo.service.BoardService;
+import com.lsj.demo.service.ReactionPointService;
 import com.lsj.demo.util.Ut;
 import com.lsj.demo.vo.Article;
 import com.lsj.demo.vo.Board;
@@ -25,6 +26,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class UserArticleController {
 	private final DemoApplication demoApplication;
 	private final BeforeActionInterceptor beforeActionInterceptor;
+	
+	@Autowired
+	private ReactionPointService reactionPointService;
 	@Autowired
 	private Rq rq;
 	@Autowired
@@ -45,7 +49,12 @@ public class UserArticleController {
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
+		// -1 싫어요, 0 표현 x, 1 좋아요
+		int usersReaction = reactionPointService.usersReaction(rq.getLoginedMemberId(), "article", id);
+		System.out.println(usersReaction);
+
 		model.addAttribute("article", article);
+		model.addAttribute("usersReaction", usersReaction);
 
 		return "usr/article/detail";
 	}
