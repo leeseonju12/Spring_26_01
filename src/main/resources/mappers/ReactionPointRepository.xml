@@ -15,5 +15,17 @@
 		AND
 		RP.memberId = #{loginedMemberId};
 	</select>
+	
+	<insert id="increaseReactionPoint">
+		INSERT INTO reactionPoint
+		SET
+		regDate = NOW(),
+		updateDate = NOW(),
+		memberId = #{loginedMemberId},
+		relTypeCode =
+		#{relTypeCode},
+		relId = #{relId},
+		`point` = 1;
+	</insert>
 
 </mapper>
