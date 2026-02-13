@@ -6,6 +6,30 @@
 <mapper
 	namespace="com.lsj.demo.repository.ReactionPointRepository">
 
+	<insert id="addGoodReactionPoint">
+		INSERT INTO reactionPoint
+		SET
+		regDate = NOW(),
+		updateDate = NOW(),
+		memberId = #{memberId},
+		relTypeCode =
+		#{relTypeCode},
+		relId = #{relId},
+		`point` = 1;
+	</insert>
+
+	<insert id="addBadReactionPoint">
+		INSERT INTO reactionPoint
+		SET
+		regDate = NOW(),
+		updateDate = NOW(),
+		memberId = #{memberId},
+		relTypeCode =
+		#{relTypeCode},
+		relId = #{relId},
+		`point` = -1;
+	</insert>
+
 	<select id="getSumReactionPoint">
 		SELECT IFNULL(SUM(RP.point),0)
 		FROM reactionPoint AS
@@ -13,19 +37,14 @@
 		WHERE RP.relTypeCode = #{relTypeCode}
 		AND RP.relId = #{relId}
 		AND
-		RP.memberId = #{loginedMemberId};
+		RP.memberId = #{memberId};
 	</select>
-	
-	<insert id="increaseReactionPoint">
-		INSERT INTO reactionPoint
-		SET
-		regDate = NOW(),
-		updateDate = NOW(),
-		memberId = #{loginedMemberId},
-		relTypeCode =
-		#{relTypeCode},
-		relId = #{relId},
-		`point` = 1;
-	</insert>
 
+	<delete id="deleteReactionPoint">
+		DELETE FROM reactionPoint
+		WHERE memberId = #{memberId}
+		AND relTypeCode = #{relTypeCode}
+		AND relId = #{relId}
+	</delete>
+	
 </mapper>
