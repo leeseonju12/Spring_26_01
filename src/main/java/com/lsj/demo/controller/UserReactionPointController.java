@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.lsj.demo.service.ArticleService;
 import com.lsj.demo.service.ReactionPointService;
 import com.lsj.demo.util.Ut;
 import com.lsj.demo.vo.ResultData;
@@ -19,9 +20,12 @@ public class UserReactionPointController {
 	@Autowired
 	private ReactionPointService reactionPointService;
 
+	@Autowired
+	private ArticleService articleService;
+
 	@RequestMapping("/usr/reactionPoint/doGoodReaction")
 	@ResponseBody
-	public Object doGoodReaction(String relTypeCode, int relId, String replaceUri) {
+	public ResultData doGoodReaction(String relTypeCode, int relId, String replaceUri) {
 
 		ResultData usersReactionRd = reactionPointService.usersReaction(rq.getLoginedMemberId(), relTypeCode, relId);
 
@@ -29,11 +33,15 @@ public class UserReactionPointController {
 
 		if (usersReaction == 1) {
 			ResultData rd = reactionPointService.deleteGoodReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-			return Ut.jsReplace("S-1", "좋아요 취소", replaceUri);
+			int goodRP = articleService.getGoodRP(relId);
+			int badRP = articleService.getBadRP(relId);
+			return ResultData.from("S-1", "좋아요 취소", "goodRP", goodRP, "badRP", badRP);
 		} else if (usersReaction == -1) {
 			ResultData rd = reactionPointService.deleteBadReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
 			rd = reactionPointService.addGoodReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-			return Ut.jsReplace("S-2", "싫어요 했었음", replaceUri);
+			int goodRP = articleService.getGoodRP(relId);
+			int badRP = articleService.getBadRP(relId);
+			return ResultData.from("S-2", "싫어요 했었음", "goodRP", goodRP, "badRP", badRP);
 		}
 
 		ResultData reactionRd = reactionPointService.addGoodReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
@@ -42,12 +50,15 @@ public class UserReactionPointController {
 			return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg());
 		}
 
-		return Ut.jsReplace(reactionRd.getResultCode(), reactionRd.getMsg(), replaceUri);
+		int goodRP = articleService.getGoodRP(relId);
+		int badRP = articleService.getBadRP(relId);
+
+		return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg(), "goodRP", goodRP, "badRP", badRP);
 	}
 
 	@RequestMapping("/usr/reactionPoint/doBadReaction")
 	@ResponseBody
-	public Object doBadReaction(String relTypeCode, int relId, String replaceUri) {
+	public ResultData  doBadReaction(String relTypeCode, int relId, String replaceUri) {
 
 		ResultData usersReactionRd = reactionPointService.usersReaction(rq.getLoginedMemberId(), relTypeCode, relId);
 
@@ -55,11 +66,15 @@ public class UserReactionPointController {
 
 		if (usersReaction == -1) {
 			ResultData rd = reactionPointService.deleteBadReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-			return Ut.jsReplace("S-1", "싫어요 취소", replaceUri);
+			int goodRP = articleService.getGoodRP(relId);
+			int badRP = articleService.getBadRP(relId);
+			return ResultData.from("S-1", "싫어요 취소", "goodRP", goodRP, "badRP", badRP);
 		} else if (usersReaction == 1) {
 			ResultData rd = reactionPointService.deleteGoodReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
 			rd = reactionPointService.addBadReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
-			return Ut.jsReplace("S-2", "좋아요 했었음", replaceUri);
+			int goodRP = articleService.getGoodRP(relId);
+			int badRP = articleService.getBadRP(relId);
+			return ResultData.from("S-2", "좋아요 했었음", "goodRP", goodRP, "badRP", badRP);
 		}
 
 		ResultData reactionRd = reactionPointService.addBadReactionPoint(rq.getLoginedMemberId(), relTypeCode, relId);
@@ -68,7 +83,10 @@ public class UserReactionPointController {
 			return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg());
 		}
 
-		return Ut.jsReplace(reactionRd.getResultCode(), reactionRd.getMsg(), replaceUri);
+		int goodRP = articleService.getGoodRP(relId);
+		int badRP = articleService.getBadRP(relId);
+
+		return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg(), "goodRP", goodRP, "badRP", badRP);
 	}
 
 }

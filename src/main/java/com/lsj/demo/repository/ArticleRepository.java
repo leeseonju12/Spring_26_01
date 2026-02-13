@@ -25,4 +25,6 @@ public interface ArticleRepository {
 	public int decreaseGoodReactionPoint(int relId);
 	public int increaseBadReactionPoint(int relId);
 	public int decreaseBadReactionPoint(int relId);
+	public int getGoodRP(int relId);
+	public int getBadRP(int relId);
 }
